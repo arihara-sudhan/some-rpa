@@ -1742,6 +1742,14 @@
                      </td>
                  </tr>
              `).join('');
+
+             // Scroll to results table
+             setTimeout(() => {
+                 const resultsHeader = document.getElementById('resultsHeader');
+                 if (resultsHeader) {
+                     resultsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                 }
+             }, 100);
          }
 
         // Handle service date option change
