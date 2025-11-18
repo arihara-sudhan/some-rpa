@@ -1,0 +1,413 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Models</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>UiPath.Platform.SyncObjects</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.UIAutomationNext.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Models.CV</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Services.RuntimeAnalyze</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Models</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="582.6666666666666,4797.333333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Chrome MediClearHouse Portal" sap:VirtualizedContainerService.HintSize="450,4774.666666666667" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InteractionMode="DebuggerApi" ScopeGuid="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V2">
+      <uix:NApplicationCard.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="416,4532.666666666667" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="status" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''Username''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_1" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="ari_moative" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="7dc29c77-e298-4eb5-ae43-e0991d5d0054" CvElementArea="228, 731, 666, 78" CvType="InputBox" DesignTimeRectangle="232, 732, 662, 74" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='username' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='username' tag='INPUT' type='text' class='' aaname='Username' /&gt;" Guid="7b6cc2ab-832c-4746-a99d-c327af1feac0" InformativeScreenshot="6094ba6fac4803ab61b3a64f96692103.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="7dc29c77-e298-4eb5-ae43-e0991d5d0054" CvTextArea="230, 696, 93, 18" CvTextArgument="Username" CvType="Text" DesignTimeRectangle="232, 691, 662, 26" ElementType="Text" FullSelectorArgument="&lt;webctrl tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl tag='LABEL' type='' class='' aaname='Username' check:innerText='Username' /&gt;" Guid="7a91186b-d8d0-46ba-b1e1-057ee8a9f629" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''Password''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_2" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="moative2025" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="7dc29c77-e298-4eb5-ae43-e0991d5d0054" CvElementArea="229, 885, 666, 76" CvType="InputBox" DesignTimeRectangle="232, 886, 662, 74" DesignTimeScaleFactor="1.5" ElementType="InputBoxPassword" FullSelectorArgument="&lt;webctrl id='password' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='password' tag='INPUT' type='password' class='' aaname='Password' /&gt;" Guid="066b1606-e978-42fa-862d-e244cc3aaa56" InformativeScreenshot="ab1f0e2804c2e36dd54be3d79a9835da.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="7dc29c77-e298-4eb5-ae43-e0991d5d0054" CvTextArea="230, 848, 85, 19" CvTextArgument="Password" CvType="Text" DesignTimeRectangle="232, 844, 662, 26" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Password' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Password' tag='LABEL' type='' class='' check:innerText='Password' /&gt;" Guid="a0981adb-0184-4d29-b0f5-495695c4b07b" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click ''Log in''" sap:VirtualizedContainerService.HintSize="382,229.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_1" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="7dc29c77-e298-4eb5-ae43-e0991d5d0054" CvElementArea="228, 1014, 668, 78" CvTextArea="525, 1043, 72, 25" CvTextArgument="Log in" CvType="Button" DesignTimeRectangle="232, 1017, 662, 74" DesignTimeScaleFactor="1.5" ElementType="Button" FullSelectorArgument="&lt;webctrl tag='BUTTON' /&gt;" FuzzySelectorArgument="&lt;webctrl tag='BUTTON' type='submit' class='login-button' aaname='Log in' check:innerText='Log in' /&gt;" Guid="4e45a890-218a-498f-8950-63dce301b097" InformativeScreenshot="e7d3936f7399d33d8a3699fd9a36d0e2.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NClick.Target>
+              <uix:NClick.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NClick.VerifyOptions>
+            </uix:NClick>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click ''Claims''" sap:VirtualizedContainerService.HintSize="382,229.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_2" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="3ff7d95f-ca5e-4a4d-b467-86f97f64e718" CvTextArea="453, 545, 57, 16" CvTextArgument="Claims" CvType="Text" DesignTimeRectangle="427, 521, 112, 93" DesignTimeScaleFactor="1.5" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Claims' class='sub-nav-tab' parentid='dashboard-page' tag='A' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Claims' class='sub-nav-tab' parentid='dashboard-page' tag='A' type='' check:innerText='Claims' /&gt;" Guid="f14cffa7-3308-42d3-bde0-80ceec47d293" InformativeScreenshot="0b52ea0f6d73a0806bc1dfe429776ef1.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NClick.Target>
+              <uix:NClick.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NClick.VerifyOptions>
+            </uix:NClick>
+            <uix:NSelectItem DisplayName="Select Item ''MediClearHouse''" sap:VirtualizedContainerService.HintSize="382,191.33333333333334" sap2010:WorkflowViewState.IdRef="NSelectItem_1" Item="Clinical Operations (67321)" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NSelectItem.Items>
+                <scg:List x:TypeArguments="x:String" Capacity="5">
+                  <x:String>Healthcare Management (28934)</x:String>
+                  <x:String>Medical Billing Services (45267)</x:String>
+                  <x:String>Clinical Operations (67321)</x:String>
+                  <x:String>Provider Network (89145)</x:String>
+                  <x:String>Patient Services (23478)</x:String>
+                </scg:List>
+              </uix:NSelectItem.Items>
+              <uix:NSelectItem.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="ee0dcdcc-ba8f-4ec2-997d-d8d7d6981b1b" CvElementArea="306, 236, 330, 47" CvType="InputBox" DesignTimeRectangle="309, 238, 324, 43" DesignTimeScaleFactor="1.5" ElementType="DropDown" FullSelectorArgument="&lt;webctrl tag='SELECT' /&gt;" FuzzySelectorArgument="&lt;webctrl tag='SELECT' type='' class='header-dropdown' aaname='' /&gt;" Guid="e79d0e04-919c-4367-af31-e3264dc5473d" InformativeScreenshot="5358de96668f670abd5da15bd8c0ac9b.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="ee0dcdcc-ba8f-4ec2-997d-d8d7d6981b1b" CvTextArea="101, 251, 178, 21" CvTextArgument="MediClearHouse" CvType="Text" DesignTimeRectangle="49, 241, 231, 38" ElementType="Text" FullSelectorArgument="&lt;webctrl class='logo-text' parentid='dashboard-page' tag='DIV' /&gt;" FuzzySelectorArgument="&lt;webctrl class='logo-text' parentid='dashboard-page' tag='DIV' type='' aaname='MediClearHouse' check:innerText='MediClearHouse' /&gt;" Guid="989e181a-4ac0-4a41-9c1b-25b1ed277417" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NSelectItem.Target>
+            </uix:NSelectItem>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''Patient Name''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_3" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="Feverick" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvElementArea="75, 420, 396, 55" CvType="InputBox" DesignTimeRectangle="78, 421, 393, 52" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='patientName' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='patientName' tag='INPUT' type='text' class='sidebar-input' aaname='' /&gt;" Guid="276ae7fa-280c-41b4-81a9-d1b6e5b5b797" InformativeScreenshot="6df8f515338e26ba8d52ef9df3937d3d.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvTextArea="77, 395, 101, 15" CvTextArgument="Patient Name" CvType="Text" DesignTimeRectangle="78, 390, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Patient Name' parentid='claims-view' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Patient Name' parentid='claims-view' tag='LABEL' type='' class='sidebar-label' check:innerText='Patient Name' /&gt;" Guid="c958ebb7-f127-4889-8b0f-c52d3a60aceb" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''Member ID''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_4" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="23456" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvElementArea="75, 532, 397, 55" CvType="InputBox" DesignTimeRectangle="78, 533, 393, 52" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='memberId' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='memberId' tag='INPUT' type='text' class='sidebar-input' aaname='' /&gt;" Guid="1e79508d-cd50-408b-9390-91b776b0d6d3" InformativeScreenshot="8b7921999b402c180386d6c071488a4e.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvTextArea="77, 506, 85, 16" CvTextArgument="Member ID" CvType="Text" DesignTimeRectangle="78, 502, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Member ID' parentid='claims-view' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Member ID' parentid='claims-view' tag='LABEL' type='' class='sidebar-label' check:innerText='Member ID' /&gt;" Guid="8c806b7c-2736-4003-8ea5-7613bf5b3da8" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''Claim ID''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_5" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="34567" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvElementArea="76, 645, 396, 55" CvType="InputBox" DesignTimeRectangle="78, 646, 393, 52" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='claimId' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='claimId' tag='INPUT' type='text' class='sidebar-input' aaname='' /&gt;" Guid="4414f8b5-3891-41b7-91d6-a0959e872c1e" InformativeScreenshot="c2b7c613040c673f73adde92873785f5.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="904cca6f-4d22-4f65-b997-508cc0d9d7d6" CvTextArea="77, 618, 62, 16" CvTextArgument="Claim ID" CvType="Text" DesignTimeRectangle="78, 614, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Claim ID' parentid='claims-view' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Claim ID' parentid='claims-view' tag='LABEL' type='' class='sidebar-label' check:innerText='Claim ID' /&gt;" Guid="4a1edf57-fc79-4ad7-93eb-229cffde2436" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NSelectItem DisplayName="Select Item ''Service Date''" sap:VirtualizedContainerService.HintSize="382,191.33333333333334" sap2010:WorkflowViewState.IdRef="NSelectItem_2" Item="Custom Range" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NSelectItem.Items>
+                <scg:List x:TypeArguments="x:String" Capacity="2">
+                  <x:String>All</x:String>
+                  <x:String>Custom Range</x:String>
+                </scg:List>
+              </uix:NSelectItem.Items>
+              <uix:NSelectItem.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="6d514902-2e87-490a-bc62-81f73de6c9ae" CvElementArea="76, 486, 396, 55" CvType="InputBox" DesignTimeRectangle="78, 487, 393, 53" DesignTimeScaleFactor="1.5" ElementType="DropDown" FullSelectorArgument="&lt;webctrl id='serviceDateOption' tag='SELECT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='serviceDateOption' tag='SELECT' type='' class='sidebar-input' aaname='' /&gt;" Guid="79c5c146-1e50-4846-a82e-e0f96ca06dc0" InformativeScreenshot="3e41a2bbf4837831fb46532a4b595902.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="6d514902-2e87-490a-bc62-81f73de6c9ae" CvTextArea="75, 461, 96, 15" CvTextArgument="Service Date" CvType="Text" DesignTimeRectangle="78, 456, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='Service Date' parentid='claims-view' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Service Date' parentid='claims-view' tag='LABEL' type='' class='sidebar-label' check:innerText='Service Date' /&gt;" Guid="c2b5f7f2-5fdf-4046-bc5e-99764c5885b1" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NSelectItem.Target>
+            </uix:NSelectItem>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''From''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,254.66666666666666" sap2010:WorkflowViewState.IdRef="NTypeInto_6" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="01/01/2002" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="082ebf87-0003-44eb-887b-1696244b352f" CvTextArea="95, 623, 96, 16" CvTextArgument="mm dd yyyy" CvType="Text" DesignTimeRectangle="78, 600, 393, 56" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='serviceDateFrom' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='serviceDateFrom' tag='INPUT' type='date' class='sidebar-input' aaname='' /&gt;" Guid="df5dc636-7d53-41ad-bc41-8bbce1e86e9c" InformativeScreenshot="046dc83792b892e06e963632ce70a940.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="082ebf87-0003-44eb-887b-1696244b352f" CvTextArea="77, 573, 39, 15" CvTextArgument="From" CvType="Text" DesignTimeRectangle="78, 569, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl parentid='serviceDateRange' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl parentid='serviceDateRange' tag='LABEL' type='' class='sidebar-label' aaname='From' check:innerText='From' /&gt;" Guid="ff3d79cd-3bb6-4135-821a-1945b5f343d2" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+            </uix:NTypeInto>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''To''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,254.66666666666666" sap2010:WorkflowViewState.IdRef="NTypeInto_7" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="01/02/2002" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" DesignTimeRectangle="78, 485, 393, 55" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;webctrl id='serviceDateTo' tag='INPUT' /&gt;" FuzzySelectorArgument="&lt;webctrl id='serviceDateTo' tag='INPUT' type='date' class='sidebar-input' aaname='' /&gt;" Guid="f1d05067-4896-4d4b-b918-d8c20de40128" InformativeScreenshot="c781179826827b5c7cdb9f587042deb1.png" IsResponsive="True" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="8222fc76-21fa-477f-9c88-5134588b99fa" CvTextArea="75, 458, 19, 15" CvTextArgument="To" CvType="Text" DesignTimeRectangle="78, 453, 393, 22" ElementType="Text" FullSelectorArgument="&lt;webctrl aaname='To' parentid='serviceDateRange' tag='LABEL' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='To' parentid='serviceDateRange' tag='LABEL' type='' class='sidebar-label' check:innerText='To' /&gt;" Guid="f182f306-349d-4b9d-ba83-36efb1d6f8a2" SearchSteps="FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+            </uix:NTypeInto>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click ''Search''" sap:VirtualizedContainerService.HintSize="382,229.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_3" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="8222fc76-21fa-477f-9c88-5134588b99fa" CvElementArea="76, 1003, 397, 72" CvTextArea="240, 1028, 66, 18" CvTextArgument="Search" CvType="Button" DesignTimeRectangle="78, 1004, 393, 68" DesignTimeScaleFactor="1.5" ElementType="Button" FullSelectorArgument="&lt;webctrl class='sidebar-search-button' parentid='claims-view' tag='BUTTON' /&gt;" FuzzySelectorArgument="&lt;webctrl class='sidebar-search-button' parentid='claims-view' tag='BUTTON' type='' aaname='Search' check:innerText='Search' /&gt;" Guid="742e05de-ccef-4cd4-a818-48e4b8e48f0a" InformativeScreenshot="9734425a82c35df3a95c1bda6e0ad18a.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NClick.Target>
+              <uix:NClick.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NClick.VerifyOptions>
+            </uix:NClick>
+            <uix:NGetText DisplayName="Get Text ''Denied''" sap:VirtualizedContainerService.HintSize="382,191.33333333333334" sap2010:WorkflowViewState.IdRef="NGetText_1" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" TextString="[status]" Version="V4">
+              <uix:NGetText.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="ad1e1f02-578f-4e6a-b846-913ee372aa2b" CvElementArea="1394, 623, 81, 36" CvTextArea="1410, 635, 48, 13" CvTextArgument="Denied" CvType="Button" DesignTimeRectangle="1397, 623, 77, 31" DesignTimeScaleFactor="1.5" ElementType="Text" FullSelectorArgument="&lt;webctrl parentid='claimsResults' tag='TABLE' /&gt;&lt;webctrl tableRow='2' tag='SPAN' /&gt;" FuzzySelectorArgument="&lt;webctrl parentid='claimsResults' tag='TABLE' /&gt;&lt;webctrl type='' tag='SPAN' class='status-badge status-denied' /&gt;" Guid="3a9e9c95-e912-44f7-be86-fddf188c9900" InformativeScreenshot="933b00683ca768368b45d79901e0bb1b.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NGetText.Target>
+            </uix:NGetText>
+            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="382,118.66666666666667" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[status]" />
+            <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click ''EOB''" sap:VirtualizedContainerService.HintSize="382,229.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_4" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa" CVScreenId="a9b0b4f7-60c4-4d9d-8653-640ed1ea6b19" CvElementArea="1714, 358, 91, 40" CvTextArea="1754, 371, 33, 13" CvTextArgument="EOB" CvType="Button" DesignTimeRectangle="1717, 360, 86, 35" DesignTimeScaleFactor="1.5" ElementType="Button" FuzzySelectorArgument="&lt;webctrl parentid='claimsResults' tag='TABLE' /&gt;&lt;webctrl id='eob-btn-34567-001' type='' tag='BUTTON' class='eob-button' aaname='View EOB for Feverick - 34567-001' check:innerText=' EOB' /&gt;" Guid="ce1211e9-6202-4af6-a148-fd333333966e" InformativeScreenshot="56eaa2b8358d4c87579612648d61b2da.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" SearchSteps="FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NClick.Target>
+              <uix:NClick.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NClick.VerifyOptions>
+            </uix:NClick>
+            <uix:NKeyboardShortcuts ActivateBefore="True" ClickBeforeMode="None" DisplayName="Keyboard Shortcuts" sap:VirtualizedContainerService.HintSize="382,255.33333333333334" sap2010:WorkflowViewState.IdRef="NKeyboardShortcuts_1" Shortcuts="[d(hk)][k(Enter)][u(hk)]" Version="V4">
+              <uix:NKeyboardShortcuts.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NKeyboardShortcuts.VerifyOptions>
+            </uix:NKeyboardShortcuts>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" DisplayName="Type Into ''File name''" EmptyFieldMode="SingleLine" sap:VirtualizedContainerService.HintSize="382,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_8" InteractionMode="HardwareEvents" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Text="feverick_01_01_2002" Version="V4">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa/eobs/eob_one.pdf" CVScreenId="dbb652fa-ab48-4605-a080-dc2d82ac5014" CvElementArea="190, 794, 1523, 35" CvType="InputBox" DesignTimeRectangle="202, 799, 1487, 27" DesignTimeScaleFactor="1.5" ElementType="InputBox" FullSelectorArgument="&lt;wnd aaname='Explorer Pane' cls='DirectUIHWND' /&gt;&lt;wnd aaname='File name:' cls='ComboBox' /&gt;&lt;wnd ctrlid='1001' /&gt;" FuzzySelectorArgument="&lt;wnd aaname='Explorer Pane' cls='DirectUIHWND' /&gt;&lt;wnd aaname='File name:' cls='ComboBox' /&gt;&lt;wnd ctrlid='1001' /&gt;" Guid="b54f1e5a-afe8-45e8-94a3-081ac94abd12" InformativeScreenshot="9dd6aae4f8b119e4fa6e196183c92a8e.png" IsResponsive="True" ScopeSelectorArgument="&lt;wnd app='chrome.exe' cls='#32770' title='Save As' /&gt;" SearchSteps="Selector, FuzzySelector, CV" Version="V4" Visibility="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="4">
+                      <uix:Target CVScreenId="dbb652fa-ab48-4605-a080-dc2d82ac5014" CvTextArea="111, 804, 81, 16" CvTextArgument="File name:" CvType="Text" DesignTimeRectangle="26, 796, 173, 33" ElementType="Text" FullSelectorArgument="&lt;wnd aaname='Explorer Pane' cls='DirectUIHWND' /&gt;&lt;ctrl name='Explorer Pane' role='pane' /&gt;&lt;ctrl name='Folder Layout Pane' role='pane' /&gt;&lt;ctrl name='Details Pane' role='pane' /&gt;&lt;ctrl name='File name:' role='text' /&gt;" FuzzySelectorArgument="&lt;wnd aaname='Explorer Pane' cls='DirectUIHWND' /&gt;&lt;ctrl name='Explorer Pane' role='pane' /&gt;&lt;ctrl name='Folder Layout Pane' role='pane' /&gt;&lt;ctrl name='Details Pane' role='pane' /&gt;&lt;ctrl name='File name:' role='text' automationid='' check:text='File name:' /&gt;" Guid="0d2d5990-dcf1-4f21-b695-78cbcba241a0" SearchSteps="Selector, FuzzySelector, CV" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+            </uix:NTypeInto>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click ''&amp;Save''" sap:VirtualizedContainerService.HintSize="382,229.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_5" InteractionMode="HardwareEvents" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="8633d146-2a8c-48cf-8c34-cdbce4dcf227" Version="V4">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="arihara-sudhan.github.io/some-rpa/eobs/eob_one.pdf" CVScreenId="dbb652fa-ab48-4605-a080-dc2d82ac5014" CvElementArea="1417, 972, 134, 41" CvTextArea="1462, 985, 40, 16" CvTextArgument="Save" CvType="Button" DesignTimeRectangle="1418, 974, 132, 39" DesignTimeScaleFactor="1.5" ElementType="Button" FullSelectorArgument="&lt;wnd ctrlid='1' title='&amp;amp;Save' /&gt;" FuzzySelectorArgument="&lt;wnd ctrlid='1' title='&amp;amp;Save' check:text='&amp;amp;Save' /&gt;" Guid="3a673b2d-63cd-4934-acc6-f031570b5b7f" InformativeScreenshot="7f2379bf7ccff191ee92177ec52b2473.png" ScopeSelectorArgument="&lt;wnd app='chrome.exe' cls='#32770' title='Save As' /&gt;" SearchSteps="Selector, FuzzySelector, CV" Version="V4" Visibility="Interactive" />
+              </uix:NClick.Target>
+              <uix:NClick.VerifyOptions>
+                <uix:VerifyExecutionOptions DisplayName="{x:Null}" Mode="Appears">
+                  <uix:VerifyExecutionOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionOptions.Retry>
+                  <uix:VerifyExecutionOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionOptions.Timeout>
+                </uix:VerifyExecutionOptions>
+              </uix:NClick.VerifyOptions>
+            </uix:NClick>
+            <uix:NNavigateBrowser Action="CloseTab" DisplayName="Navigate Browser - Close Tab" sap:VirtualizedContainerService.HintSize="382,110" sap2010:WorkflowViewState.IdRef="NNavigateBrowser_1" Version="V4" />
+          </Sequence>
+        </ActivityAction>
+      </uix:NApplicationCard.Body>
+      <uix:NApplicationCard.TargetApp>
+        <uix:TargetApp Area="-11, -11, 1942, 1150" BrowserType="Chrome" ContentHash="lzKuaCDvS0ioX3Vgn9Y-5g" IconBase64="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" InformativeScreenshot="613d8a9b7176e6709bf546d2b401a827.jpg" Reference="ZY7E9sz71U-PKZ1E8dlYqg/5rmK-Bkw5Eiw9zV8zGUpaw" Selector="&lt;html app='chrome.exe' title='MediClearHouse Portal' /&gt;" Title="MediClearHouse Portal" Url="https://arihara-sudhan.github.io/some-rpa/" Version="V1" />
+      </uix:NApplicationCard.TargetApp>
+    </uix:NApplicationCard>
+  </Sequence>
+</Activity>
