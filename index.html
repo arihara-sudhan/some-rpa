@@ -1655,13 +1655,8 @@
                  eobPath = 'eobs/eob_one.pdf'; // Default to eob_one for third claim
              }
 
-             // Create a temporary link element to trigger download
-             const link = document.createElement('a');
-             link.href = eobPath;
-             link.download = `EOB_${claimId}.pdf`;
-             document.body.appendChild(link);
-             link.click();
-             document.body.removeChild(link);
+             // Open EOB PDF in a new tab
+             window.open(eobPath, '_blank');
          }
 
          function searchClaims() {
@@ -1743,7 +1738,7 @@
                      <td><span class="status-badge status-${claim.statusClass}">${claim.status}</span></td>
                      <td>${claim.paidAmount}</td>
                      <td>
-                         <button class="eob-button" onclick="downloadEOB('${claim.id}')" title="Download EOB">📄 EOB</button>
+                         <button class="eob-button" onclick="downloadEOB('${claim.id}')" title="View EOB">📄 EOB</button>
                      </td>
                  </tr>
              `).join('');
