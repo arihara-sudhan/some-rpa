@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediClearHouse Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #2a2a2a;
+            min-height: 100vh;
+        }
+
+        /* Login Page Styles */
+        .login-page {
+            display: none;
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+        }
+
+        .login-page.active {
+            display: flex;
+        }
+
+        .login-logo-container {
+            position: absolute;
+            top: 3vw;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        .login-logo-icon {
+            width: 3vw;
+            height: 3vw;
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .login-logo-text {
+            font-size: 1.8vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: 0.2vw;
+        }
+
+        .login-main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            width: 85vw;
+            max-width: 1400px;
+            margin-top: 8vw;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 4vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-welcome-text {
+            font-size: 4.5vw;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1vw;
+            line-height: 1.1;
+        }
+
+        .client-login-text {
+            font-size: 1.2vw;
+            color: #4a4a4a;
+            font-weight: 500;
+            margin-bottom: 3vw;
+            letter-spacing: 0.05vw;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2vw;
+        }
+
+        .login-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8vw;
+        }
+
+        .login-form-group label {
+            font-size: 1vw;
+            font-weight: 600;
+            color: #2a2a2a;
+            letter-spacing: 0.02vw;
+        }
+
+        .login-form-group input {
+            padding: 1.2vw;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 1vw;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #4a4a4a;
+            box-shadow: 0 0 0 3px rgba(74, 74, 74, 0.1);
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1.3vw 3vw;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1vw;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1vw;
+            letter-spacing: 0.05vw;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password-link {
+            color: #4a4a4a;
+            font-size: 0.95vw;
+            text-decoration: underline;
+            margin-top: 1.5vw;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .forgot-password-link:hover {
+            color: #1a1a1a;
+        }
+
+        .login-info-section {
+            background: #ffffff;
+            padding: 4vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .login-info-title {
+            font-size: 2.5vw;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2vw;
+            line-height: 1.2;
+        }
+
+        .login-info-text {
+            font-size: 1.1vw;
+            color: #4a4a4a;
+            line-height: 1.8;
+            margin-bottom: 3vw;
+        }
+
+        .register-button {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1.2vw 2.5vw;
+            border: none;
+            border-radius: 4px;
+            font-size: 1vw;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: fit-content;
+            letter-spacing: 0.05vw;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .login-error-message {
+            color: #d32f2f;
+            font-size: 0.9vw;
+            margin-top: -1vw;
+            display: none;
+        }
+
+        .login-error-message.show {
+            display: block;
+        }
+
+        /* Dashboard Page - Hidden by default */
+        .dashboard-page {
+            display: none;
+        }
+
+        .dashboard-page.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .top-header {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1vw 2vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95vw;
+        }
+
+        .top-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5vw;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+        }
+
+        .logo-icon {
+            width: 2vw;
+            height: 2vw;
+            background: white;
+            clip-path: polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.1vw;
+            letter-spacing: 0.05vw;
+        }
+
+        .header-dropdown {
+            padding: 0.5vw 1vw;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: #1a1a1a;
+            font-size: 0.9vw;
+            cursor: pointer;
+        }
+
+        .header-dropdown option {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        .top-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5vw;
+        }
+
+        .welcome-text {
+            font-size: 0.95vw;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -0.5vw;
+            right: -0.5vw;
+            background: #d32f2f;
+            color: white;
+            border-radius: 50%;
+            width: 1.5vw;
+            height: 1.5vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75vw;
+            font-weight: 600;
+        }
+
+        .header-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9vw;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .header-link:hover {
+            opacity: 0.8;
+        }
+
+        .support-links {
+            display: flex;
+            gap: 1vw;
+            font-size: 0.85vw;
+        }
+
+        .main-nav {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            padding: 0 2vw;
+            display: flex;
+            gap: 2vw;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 1.2vw 1vw;
+            font-size: 0.95vw;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05vw;
+            border-bottom: 3px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            border-bottom-color: #fff;
+        }
+
+        .nav-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 0.3vw;
+        }
+
+        .content-container {
+            padding: 2vw;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2vw;
+        }
+
+        .page-title {
+            font-size: 2.5vw;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+            padding: 0.8vw 1.2vw;
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            width: 30vw;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.95vw;
+            color: #2a2a2a;
+        }
+
+        .sub-nav {
+            display: flex;
+            gap: 0.5vw;
+            margin-bottom: 2vw;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .sub-nav-tab {
+            padding: 1vw 1.5vw;
+            font-size: 0.95vw;
+            font-weight: 600;
+            color: #666;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sub-nav-tab:hover,
+        .sub-nav-tab.active {
+            color: #1a1a1a;
+            border-bottom-color: #1a1a1a;
+        }
+
+        .dashboard-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5vw;
+        }
+
+        .dashboard-title {
+            font-size: 1.8vw;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 1vw;
+            align-items: center;
+        }
+
+        .action-button {
+            padding: 0.6vw 1.2vw;
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9vw;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .action-button:hover {
+            background: #3a3a3a;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 1vw;
+            margin-bottom: 2vw;
+        }
+
+        .dashboard-tab {
+            padding: 0.8vw 1.5vw;
+            font-size: 0.95vw;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dashboard-tab.active {
+            color: #1a1a1a;
+            border-bottom-color: #1a1a1a;
+        }
+
+        .filters-section {
+            background: white;
+            padding: 2vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2vw;
+        }
+
+        .filters-title {
+            font-size: 1.2vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5vw;
+            text-transform: uppercase;
+            letter-spacing: 0.05vw;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5vw;
+            margin-bottom: 1.5vw;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5vw;
+        }
+
+        .filter-label {
+            font-size: 0.9vw;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+
+        .filter-input {
+            padding: 0.8vw;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 0.9vw;
+            background: white;
+            color: #2a2a2a;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #4a4a4a;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1vw;
+            align-items: center;
+            margin-bottom: 1vw;
+        }
+
+        .advanced-link {
+            color: #1a1a1a;
+            text-decoration: underline;
+            font-size: 0.9vw;
+            cursor: pointer;
+        }
+
+        .apply-button {
+            padding: 0.8vw 2vw;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95vw;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .apply-button:hover {
+            background: #2a2a2a;
+        }
+
+        .active-filters {
+            display: flex;
+            gap: 1vw;
+            flex-wrap: wrap;
+            margin-top: 1vw;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+            padding: 0.5vw 1vw;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.85vw;
+        }
+
+        .filter-tag-close {
+            cursor: pointer;
+            font-weight: 700;
+            color: #666;
+        }
+
+        .save-clear-links {
+            display: flex;
+            gap: 1vw;
+            margin-top: 1vw;
+        }
+
+        .save-clear-link {
+            color: #1a1a1a;
+            text-decoration: underline;
+            font-size: 0.9vw;
+            cursor: pointer;
+        }
+
+        .metrics-section {
+            background: white;
+            padding: 2vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2vw;
+        }
+
+        .metrics-title {
+            font-size: 1.5vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5vw;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2vw;
+            margin-bottom: 1.5vw;
+        }
+
+        .metric-card {
+            padding: 2vw;
+            border-radius: 8px;
+            color: white;
+            position: relative;
+        }
+
+        .metric-card.orange-red {
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+        }
+
+        .metric-card.orange {
+            background: linear-gradient(135deg, #d2691e 0%, #cd853f 100%);
+        }
+
+        .metric-card.teal {
+            background: linear-gradient(135deg, #2f4f4f 0%, #4682b4 100%);
+        }
+
+        .metric-card.blue {
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+        }
+
+        .metric-label {
+            font-size: 0.95vw;
+            font-weight: 600;
+            margin-bottom: 0.5vw;
+            opacity: 0.9;
+        }
+
+        .metric-value {
+            font-size: 2.5vw;
+            font-weight: 700;
+        }
+
+        .metric-info {
+            position: absolute;
+            top: 1vw;
+            right: 1vw;
+            width: 1.5vw;
+            height: 1.5vw;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9vw;
+            font-weight: 700;
+        }
+
+        .accounts-info {
+            font-size: 1vw;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .batches-section {
+            background: white;
+            padding: 2vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .batches-title {
+            font-size: 1.5vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5vw;
+        }
+
+        .batches-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .batches-table th {
+            text-align: left;
+            padding: 1vw;
+            background: #f5f5f5;
+            font-size: 0.95vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .batches-table td {
+            padding: 1vw;
+            font-size: 0.9vw;
+            color: #4a4a4a;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .batches-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Claims Search Interface */
+        .view-container {
+            display: none;
+        }
+
+        .view-container.active {
+            display: block;
+        }
+
+        .claims-search-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2vw;
+            margin-top: 2vw;
+        }
+
+        .claims-sidebar {
+            background: white;
+            padding: 1.5vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 2vw;
+        }
+
+        .sidebar-title {
+            font-size: 1vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1vw;
+        }
+
+        .sidebar-dropdown {
+            width: 100%;
+            padding: 0.8vw;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 0.9vw;
+            margin-bottom: 1.5vw;
+            background: white;
+            color: #2a2a2a;
+        }
+
+        .sidebar-button {
+            width: 100%;
+            padding: 0.8vw;
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9vw;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1.5vw;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-button:hover {
+            background: #3a3a3a;
+        }
+
+        .sidebar-search-button {
+            background: #1a1a1a;
+            color: white;
+            width: 100%;
+            padding: 1.2vw;
+            font-size: 1vw;
+            font-weight: 600;
+            margin-top: 1.5vw;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-search-button:hover {
+            background: #2a2a2a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .sidebar-search-button:active {
+            transform: translateY(0);
+        }
+
+        .sidebar-filter-group {
+            margin-bottom: 1.5vw;
+        }
+
+        .sidebar-label {
+            font-size: 0.85vw;
+            font-weight: 600;
+            color: #4a4a4a;
+            margin-bottom: 0.5vw;
+            display: block;
+        }
+
+        .sidebar-input {
+            width: 100%;
+            padding: 0.7vw;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 0.85vw;
+            background: white;
+            color: #2a2a2a;
+            box-sizing: border-box;
+        }
+
+        .sidebar-input:focus {
+            outline: none;
+            border-color: #4a4a4a;
+        }
+
+        .sidebar-checkbox-group {
+            margin-top: 1.5vw;
+        }
+
+        .sidebar-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+            margin-bottom: 0.8vw;
+        }
+
+        .sidebar-checkbox input {
+            width: 1.2vw;
+            height: 1.2vw;
+            cursor: pointer;
+        }
+
+        .sidebar-checkbox label {
+            font-size: 0.85vw;
+            color: #4a4a4a;
+            cursor: pointer;
+        }
+
+        .sidebar-advanced-link {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.85vw;
+            margin-top: 1vw;
+            display: block;
+        }
+
+        .claims-content {
+            background: white;
+            padding: 2vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .claims-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5vw;
+        }
+
+        .results-count {
+            font-size: 1.2vw;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .results-links {
+            display: flex;
+            gap: 1.5vw;
+        }
+
+        .results-link {
+            color: #1a1a1a;
+            text-decoration: underline;
+            font-size: 0.9vw;
+            cursor: pointer;
+        }
+
+        .claims-actions {
+            display: flex;
+            gap: 1vw;
+            align-items: center;
+            margin-bottom: 1.5vw;
+            flex-wrap: wrap;
+        }
+
+        .claims-action-button {
+            padding: 0.7vw 1.2vw;
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85vw;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .claims-action-button:hover {
+            background: #3a3a3a;
+        }
+
+        .claims-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+            font-size: 0.85vw;
+            color: #4a4a4a;
+        }
+
+        .claims-checkbox-label input {
+            width: 1.2vw;
+            height: 1.2vw;
+            cursor: pointer;
+        }
+
+        .claims-message {
+            text-align: center;
+            padding: 4vw;
+            color: #666;
+        }
+
+        .claims-message-icon {
+            font-size: 4vw;
+            margin-bottom: 1vw;
+        }
+
+        .claims-message-text {
+            font-size: 1.2vw;
+            font-weight: 600;
+            margin-bottom: 0.5vw;
+        }
+
+        .claims-message-subtext {
+            font-size: 0.95vw;
+        }
+
+        .claims-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .claims-table th {
+            text-align: left;
+            padding: 1vw;
+            background: #f5f5f5;
+            font-size: 0.9vw;
+            font-weight: 700;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .claims-table td {
+            padding: 1vw;
+            font-size: 0.85vw;
+            color: #4a4a4a;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .claims-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-badge {
+            padding: 0.3vw 0.8vw;
+            border-radius: 12px;
+            font-size: 0.75vw;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-denied {
+            background: #ffe0e0;
+            color: #c62828;
+        }
+
+        .status-paid {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-partial {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1vw;
+            margin-top: 2vw;
+            padding: 1vw;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .pagination-button {
+            padding: 0.5vw 1vw;
+            background: white;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 0.85vw;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-button:not(:disabled):hover {
+            background: #4a4a4a;
+            color: white;
+            border-color: #4a4a4a;
+        }
+
+         .pagination-info {
+             font-size: 0.9vw;
+             color: #4a4a4a;
+         }
+
+         .eob-button {
+             background: #1a1a1a;
+             color: white;
+             border: none;
+             border-radius: 4px;
+             padding: 0.4vw 0.8vw;
+             font-size: 0.75vw;
+             font-weight: 600;
+             cursor: pointer;
+             transition: background-color 0.3s;
+         }
+
+         .eob-button:hover {
+             background: #4a4a4a;
+         }
+
+         .eob-icon {
+             font-size: 1vw;
+             cursor: pointer;
+             color: #1a1a1a;
+             transition: color 0.3s;
+         }
+
+         .eob-icon:hover {
+             color: #4a4a4a;
+         }
+
+         @media (max-width: 968px) {
+            .top-header,
+            .main-nav,
+            .sub-nav {
+                flex-direction: column;
+                gap: 1vw;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .claims-search-container {
+                grid-template-columns: 1fr;
+            }
+
+            .claims-sidebar {
+                position: relative;
+            }
+
+            .login-main-container {
+                grid-template-columns: 1fr;
+                width: 95vw;
+            }
+
+            .login-info-section {
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+            }
+
+            .login-welcome-text {
+                font-size: 8vw;
+            }
+
+            .client-login-text,
+            .login-form-group label,
+            .login-form-group input,
+            .login-button,
+            .forgot-password-link {
+                font-size: 4vw;
+            }
+
+            .login-info-title {
+                font-size: 6vw;
+            }
+
+            .login-info-text,
+            .register-button {
+                font-size: 3.5vw;
+            }
+
+            .login-logo-icon {
+                width: 6vw;
+                height: 6vw;
+            }
+
+            .login-logo-text {
+                font-size: 4vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-page active">
+        <div class="login-logo-container">
+            <div class="login-logo-icon"></div>
+            <div class="login-logo-text">MediClearHouse</div>
+        </div>
+
+        <div class="login-main-container">
+            <div class="login-section">
+                <div class="login-welcome-text">WELCOME</div>
+                <div class="client-login-text">Client Login</div>
+                
+                <form class="login-form" id="loginForm">
+                    <div class="login-form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required autocomplete="username">
+                    </div>
+                    
+                    <div class="login-form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+
+                    <div class="login-error-message" id="errorMessage">Invalid username or password. Please try again.</div>
+                    
+                    <button type="submit" class="login-button">Log in</button>
+                    
+                    <a href="#" class="forgot-password-link" onclick="alert('Please contact your system administrator for password reset.'); return false;">
+                        Forgot your username or password?
+                    </a>
+                </form>
+            </div>
+
+            <div class="login-info-section">
+                <div class="login-info-title">MediClearHouse Conference 2026</div>
+                <div class="login-info-text">
+                    Join us for the MediClearHouse Client Conference at JW Marriott San Antonio Hill Country Resort & Spa, August 25-27, 2026. 
+                    Reserve your spot today!
+                </div>
+                <button class="register-button" onclick="alert('Conference registration will be available soon.');">Register Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="dashboard-page">
+    <div class="top-header">
+        <div class="top-header-left">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <div class="logo-text">MediClearHouse</div>
+            </div>
+            <select class="header-dropdown">
+                <option>Healthcare Management (28934)</option>
+                <option>Medical Billing Services (45267)</option>
+                <option>Clinical Operations (67321)</option>
+                <option>Provider Network (89145)</option>
+                <option>Patient Services (23478)</option>
+            </select>
+        </div>
+        <div class="top-header-right">
+            <div class="welcome-text">Welcome, Ari</div>
+            <div class="notification-icon">
+                <span>✉</span>
+                <div class="notification-badge">70</div>
+            </div>
+            <a href="#" class="header-link" onclick="showLoginPage(); return false;">Log off</a>
+            <div class="support-links">
+                <a href="#" class="header-link">Support and Training</a>
+                <a href="#" class="header-link">System Status</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-nav">
+        <a href="#" class="nav-link">MY WORK</a>
+        <a href="#" class="nav-link active">
+            <span class="nav-dropdown">CLAIMS PROCESSING <span>▼</span></span>
+        </a>
+        <a href="#" class="nav-link">
+            <span class="nav-dropdown">PATIENT TOOLS <span>▼</span></span>
+        </a>
+        <a href="#" class="nav-link">
+            <span class="nav-dropdown">MEDICARE <span>▼</span></span>
+        </a>
+        <a href="#" class="nav-link">ACCOUNT</a>
+    </div>
+
+    <div class="content-container">
+        <div class="page-header">
+            <div class="page-title">Professional Claims</div>
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="Claim Search">
+            </div>
+        </div>
+
+        <div class="sub-nav">
+            <a href="#" class="sub-nav-tab active" onclick="showView('dashboard'); return false;">Dashboard</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('automation'); return false;">Automation Center</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('claims'); return false;">Claims</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('batches'); return false;">Batches</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('name-matching'); return false;">Name Matching</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('providers'); return false;">Providers</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('reports'); return false;">Reports</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('exports'); return false;">Exports</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('payers'); return false;">Payers</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('coding-tools'); return false;">Coding Tools</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('settings'); return false;">Settings</a>
+            <a href="#" class="sub-nav-tab" onclick="showView('attachments'); return false;">Attachments</a>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view-container active">
+        <div class="dashboard-section">
+            <div class="dashboard-title">Dashboard</div>
+            <div class="dashboard-actions">
+                <span>ℹ</span>
+                <button class="action-button">Export ▼</button>
+                <button class="action-button">Saved Searches (0) ▼</button>
+            </div>
+        </div>
+
+        <div class="dashboard-tabs">
+            <div class="dashboard-tab active">Overview</div>
+            <div class="dashboard-tab">User Performance</div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filters-title">FILTERS</div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Claim Received Date</label>
+                    <select class="filter-input">
+                        <option>Past 2 Weeks</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">From</label>
+                    <input type="date" class="filter-input" value="2025-11-03">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">To</label>
+                    <input type="date" class="filter-input" value="2025-11-17">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Account</label>
+                    <input type="text" class="filter-input" placeholder="Account Filter">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Claim Type</label>
+                    <select class="filter-input">
+                        <option>All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <a href="#" class="advanced-link">Advanced Filters</a>
+                <button class="apply-button">Apply</button>
+            </div>
+            <div class="active-filters">
+                <div class="filter-tag">
+                    Accounts: 38
+                    <span class="filter-tag-close">×</span>
+                </div>
+                <div class="filter-tag">
+                    Claim Received Date: 11/03/2025 - 11/17/2025
+                    <span class="filter-tag-close">×</span>
+                </div>
+                <div class="filter-tag">
+                    Claim Type: Professional
+                    <span class="filter-tag-close">×</span>
+                </div>
+                <div class="filter-tag">
+                    Claim Type: Institutional
+                    <span class="filter-tag-close">×</span>
+                </div>
+            </div>
+            <div class="save-clear-links">
+                <a href="#" class="save-clear-link">Save Search</a>
+                <a href="#" class="save-clear-link">Clear All</a>
+            </div>
+        </div>
+
+        <div class="metrics-section">
+            <div class="metrics-title">Key Claims Metrics</div>
+            <div class="metrics-grid">
+                <div class="metric-card orange-red">
+                    <div class="metric-info">i</div>
+                    <div class="metric-label">Clearinghouse Rejections</div>
+                    <div class="metric-value">2.7%</div>
+                </div>
+                <div class="metric-card orange">
+                    <div class="metric-label">Payer Rejections</div>
+                    <div class="metric-value">3.0%</div>
+                </div>
+                <div class="metric-card teal">
+                    <div class="metric-info">i</div>
+                    <div class="metric-label">Perfect Pass Claims</div>
+                    <div class="metric-value">94.3%</div>
+                </div>
+                <div class="metric-card blue">
+                    <div class="metric-info">i</div>
+                    <div class="metric-label">Clean After MediClearHouse</div>
+                    <div class="metric-value">96.9%</div>
+                </div>
+            </div>
+            <div class="accounts-info">38 Accounts</div>
+        </div>
+
+        <div class="batches-section">
+            <div class="batches-title">Latest Batches</div>
+            <table class="batches-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Files</th>
+                        <th>Claims</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mon 11/17/2025</td>
+                        <td>232</td>
+                        <td>2,625</td>
+                    </tr>
+                    <tr>
+                        <td>Sun 11/16/2025</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Sat 11/15/2025</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Fri 11/14/2025</td>
+                        <td>274</td>
+                        <td>2,236</td>
+                    </tr>
+                    <tr>
+                        <td>Thu 11/13/2025</td>
+                        <td>266</td>
+                        <td>1,745</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+
+        <!-- Claims Search View -->
+        <div id="claims-view" class="view-container">
+            <div class="claims-search-container">
+                <div class="claims-sidebar">
+                    <select class="sidebar-dropdown">
+                        <option>Saved Searches (0)</option>
+                    </select>
+                    <button class="sidebar-button">Search</button>
+                    
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Workflow Stage</label>
+                        <select class="sidebar-input">
+                            <option>All Claims</option>
+                        </select>
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Status</label>
+                        <select class="sidebar-input">
+                            <option>All Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Claim Number</label>
+                        <input type="text" class="sidebar-input" id="claimNumber">
+                    </div>
+
+                     <div class="sidebar-filter-group">
+                         <label class="sidebar-label">Patient Name</label>
+                         <input type="text" class="sidebar-input" id="patientName">
+                     </div>
+
+                     <div class="sidebar-filter-group">
+                         <label class="sidebar-label">Member ID</label>
+                         <input type="text" class="sidebar-input" id="memberId">
+                     </div>
+
+                     <div class="sidebar-filter-group">
+                         <label class="sidebar-label">Claim ID</label>
+                         <input type="text" class="sidebar-input" id="claimId">
+                     </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Payer</label>
+                        <select class="sidebar-input">
+                            <option>My Payer</option>
+                        </select>
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Service Date</label>
+                        <select class="sidebar-input" id="serviceDateOption">
+                            <option selected>All</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                     <div class="sidebar-filter-group" id="serviceDateRange" style="display: none;">
+                         <label class="sidebar-label">From</label>
+                         <input type="date" class="sidebar-input" id="serviceDateFrom">
+                         <label class="sidebar-label" style="margin-top: 0.5vw;">To</label>
+                         <input type="date" class="sidebar-input" id="serviceDateTo">
+                     </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Transaction Date</label>
+                        <select class="sidebar-input">
+                            <option>Last 90 Days</option>
+                        </select>
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label class="sidebar-label">Archived</label>
+                        <select class="sidebar-input">
+                            <option>None</option>
+                        </select>
+                    </div>
+
+                    <div class="sidebar-checkbox-group">
+                        <div class="sidebar-checkbox">
+                            <input type="checkbox" id="showDraft">
+                            <label for="showDraft">Draft</label>
+                        </div>
+                        <div class="sidebar-checkbox">
+                            <input type="checkbox" id="showWarnings">
+                            <label for="showWarnings">Warnings</label>
+                        </div>
+                        <div class="sidebar-checkbox">
+                            <input type="checkbox" id="showAvailable">
+                            <label for="showAvailable">Available for Check Status</label>
+                        </div>
+                        <div class="sidebar-checkbox">
+                            <input type="checkbox" id="showNotInWorkgroup">
+                            <label for="showNotInWorkgroup">Not in a WorkGroup</label>
+                        </div>
+                    </div>
+
+                    <a href="#" class="sidebar-advanced-link">Advanced Search ></a>
+
+                    <button class="sidebar-search-button" onclick="searchClaims()">Search</button>
+                </div>
+
+                <div class="claims-content">
+                    <div class="claims-results-header" id="resultsHeader" style="display: none;">
+                        <div class="results-count" id="resultsCount">0 Results</div>
+                        <div class="results-links">
+                            <a href="#" class="results-link">Rejected Claims Dashboard</a>
+                            <a href="#" class="results-link">Claim Warnings</a>
+                        </div>
+                    </div>
+
+                    <div class="claims-actions" id="claimsActions" style="display: none;">
+                        <button class="claims-action-button">Archive</button>
+                        <button class="claims-action-button">Unarchive</button>
+                        <button class="claims-action-button">Hold</button>
+                        <button class="claims-action-button">View</button>
+                        <button class="claims-action-button">Notes</button>
+                        <button class="claims-action-button">Download CSV</button>
+                        <label class="claims-checkbox-label">
+                            <input type="checkbox" checked> Excel-Friendly CSV
+                        </label>
+                        <a href="#" class="results-link">Show Claim Messages</a>
+                        <span style="font-size: 1.5vw; cursor: pointer;">🖨</span>
+                    </div>
+
+                    <div id="claimsMessage" class="claims-message">
+                        <div class="claims-message-icon">☰</div>
+                        <div class="claims-message-text">Please run a search.</div>
+                        <div class="claims-message-subtext">You can do so by entering criteria in the left search area.</div>
+                    </div>
+
+                    <div id="claimsResults" style="display: none;">
+                        <table class="claims-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>Claim ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Member ID</th>
+                                    <th>Service Date</th>
+                                     <th>Billed Amount</th>
+                                     <th>Status</th>
+                                     <th>Paid Amount</th>
+                                     <th>EOB</th>
+                                 </tr>
+                            </thead>
+                            <tbody id="claimsTableBody">
+                            </tbody>
+                        </table>
+
+                        <div class="pagination">
+                            <button class="pagination-button" disabled>««</button>
+                            <button class="pagination-button" disabled>«</button>
+                            <span class="pagination-info">Page 1 of 1</span>
+                            <button class="pagination-button" disabled>»</button>
+                            <button class="pagination-button" disabled>»»</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Login/Logout Functions
+        function showLoginPage() {
+            document.getElementById('login-page').classList.add('active');
+            document.getElementById('dashboard-page').classList.remove('active');
+            // Clear password field
+            document.getElementById('password').value = '';
+        }
+
+        function showDashboardPage() {
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('dashboard-page').classList.add('active');
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Validate credentials
+            if (username === 'ari_moative' && password === 'moative2025') {
+                // Successful login - show dashboard
+                errorMessage.classList.remove('show');
+                showDashboardPage();
+            } else {
+                // Show error message
+                errorMessage.classList.add('show');
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
+        // Initialize - show login page on load
+        window.addEventListener('load', function() {
+            showLoginPage();
+        });
+    </script>
+
+    <script>
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-container').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.sub-nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected view
+            const selectedView = document.getElementById(viewName + '-view');
+            if (selectedView) {
+                selectedView.classList.add('active');
+            }
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+         function downloadEOB(claimId) {
+             // Map claim IDs to EOB PDF files based on claim index
+             // First claim -> eob_one.pdf, Second claim -> eob_two.pdf, Third claim -> eob_one.pdf
+             const claimIndex = claimId.split('-')[1]; // Get the number after the dash
+             let eobPath;
+             
+             if (claimIndex === '001') {
+                 eobPath = 'eobs/eob_one.pdf';
+             } else if (claimIndex === '002') {
+                 eobPath = 'eobs/eob_two.pdf';
+             } else {
+                 eobPath = 'eobs/eob_one.pdf'; // Default to eob_one for third claim
+             }
+
+             // Create a temporary link element to trigger download
+             const link = document.createElement('a');
+             link.href = eobPath;
+             link.download = `EOB_${claimId}.pdf`;
+             document.body.appendChild(link);
+             link.click();
+             document.body.removeChild(link);
+         }
+
+         function searchClaims() {
+             // Hide message, show results
+             document.getElementById('claimsMessage').style.display = 'none';
+             document.getElementById('resultsHeader').style.display = 'flex';
+             document.getElementById('claimsActions').style.display = 'flex';
+             document.getElementById('claimsResults').style.display = 'block';
+
+             // Get form values
+             const patientName = document.getElementById('patientName').value;
+             const memberId = document.getElementById('memberId').value;
+             const claimId = document.getElementById('claimId').value;
+             const serviceDateFrom = document.getElementById('serviceDateFrom').value;
+             const serviceDateTo = document.getElementById('serviceDateTo').value;
+
+             // Format dates if provided
+             let serviceDateFromFormatted = '';
+             let serviceDateToFormatted = '';
+             if (serviceDateFrom) {
+                 const fromDate = new Date(serviceDateFrom + 'T00:00:00');
+                 serviceDateFromFormatted = fromDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+             }
+             if (serviceDateTo) {
+                 const toDate = new Date(serviceDateTo + 'T00:00:00');
+                 serviceDateToFormatted = toDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+             }
+
+             // Generate claims data based on search
+             const claims = [
+                 {
+                     id: (claimId || '34567') + '-001',
+                     patientName: patientName || 'Feverick',
+                     memberId: memberId || '23456',
+                     serviceDate: serviceDateFromFormatted || '01/01/2002',
+                     billedAmount: '$1,250.00',
+                     status: 'Denied',
+                     statusClass: 'denied',
+                     paidAmount: '$0.00',
+                     eobFile: 'eobs/eob_one.pdf'
+                 },
+                 {
+                     id: (claimId || '34567') + '-002',
+                     patientName: patientName || 'Feverick',
+                     memberId: memberId || '23456',
+                     serviceDate: serviceDateToFormatted || '01/02/2002',
+                     billedAmount: '$850.00',
+                     status: 'Paid',
+                     statusClass: 'paid',
+                     paidAmount: '$850.00',
+                     eobFile: 'eobs/eob_two.pdf'
+                 },
+                 {
+                     id: (claimId || '34567') + '-003',
+                     patientName: patientName || 'Feverick',
+                     memberId: memberId || '23456',
+                     serviceDate: serviceDateToFormatted || '01/02/2002',
+                     billedAmount: '$1,500.00',
+                     status: 'Partially Paid',
+                     statusClass: 'partial',
+                     paidAmount: '$900.00',
+                     eobFile: 'eobs/eob_one.pdf'
+                 }
+             ];
+
+             // Update results count
+             document.getElementById('resultsCount').textContent = claims.length + ' Results';
+
+             // Populate table
+             const tbody = document.getElementById('claimsTableBody');
+             tbody.innerHTML = claims.map(claim => `
+                 <tr>
+                     <td><input type="checkbox"></td>
+                     <td>${claim.id}</td>
+                     <td>${claim.patientName}</td>
+                     <td>${claim.memberId}</td>
+                     <td>${claim.serviceDate}</td>
+                     <td>${claim.billedAmount}</td>
+                     <td><span class="status-badge status-${claim.statusClass}">${claim.status}</span></td>
+                     <td>${claim.paidAmount}</td>
+                     <td>
+                         <button class="eob-button" onclick="downloadEOB('${claim.id}')" title="Download EOB">📄 EOB</button>
+                     </td>
+                 </tr>
+             `).join('');
+         }
+
+        // Handle service date option change
+        document.getElementById('serviceDateOption')?.addEventListener('change', function() {
+            const dateRange = document.getElementById('serviceDateRange');
+            if (this.value === 'custom') {
+                dateRange.style.display = 'block';
+            } else {
+                dateRange.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
