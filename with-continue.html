@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Three Steps</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      min-height: 100vh;
+      color: #1b5e20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 1.6rem;
+      color: #2e7d32;
+    }
+
+    p.message {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      margin-bottom: 2.2rem;
+      color: #2e7d32;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      margin: 20px 0 28px;
+      border: 2px solid #a5d6a7;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      background: #f1f8e9;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76,175,80,0.2);
+    }
+
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #388e3c;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .answer {
+      margin-top: 2.5rem;
+      font-size: 1.3rem;
+      color: #1b5e20;
+      min-height: 1.6em;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Page 1: Name -->
+  <div id="page1" class="page active">
+    <h1>What's your name?</h1>
+    <input type="text" id="nameInput" placeholder="Type here..." autocomplete="off">
+    <button onclick="goToPage(2)">Next</button>
+  </div>
+
+  <!-- Page 2: Update message + Continue -->
+  <div id="page2" class="page">
+    <h1>Notice</h1>
+    <p class="message">There are some updates in this page.<br>Are you okay with this?</p>
+    <button onclick="goToPage(3)">Continue</button>
+  </div>
+
+  <!-- Page 3: Octopus question + Results -->
+  <div id="page3" class="page">
+    <h1>What happened to your pet octopus?</h1>
+    <input type="text" id="octopusInput" placeholder="Type here..." autocomplete="off">
+    <button onclick="showAnswers()">Finish</button>
+
+    <div class="answer" id="result"></div>
+  </div>
+
+</div>
+
+<script>
+  function goToPage(pageNum) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page${pageNum}`).classList.add('active');
+  }
+
+  function showAnswers() {
+    const name = document.getElementById('nameInput').value.trim() || "someone mysterious";
+    const octopus = document.getElementById('octopusInput').value.trim() || "something very strange";
+
+    document.getElementById('result').innerHTML = `
+      ${name}<br><br>
+      ${octopus}
+    `;
+  }
+</script>
+
+</body>
+</html>
