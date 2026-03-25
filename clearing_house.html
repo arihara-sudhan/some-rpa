@@ -1086,6 +1086,120 @@
              color: #4a4a4a;
          }
 
+         /* Modal Styles */
+         .help-icon {
+             font-size: 1.1vw;
+             cursor: pointer;
+             color: white;
+             margin-left: 0.5vw;
+             transition: transform 0.2s, opacity 0.2s;
+             display: inline-block;
+         }
+
+         .help-icon:hover {
+             opacity: 0.8;
+             transform: scale(1.1);
+         }
+
+         .modal {
+             display: none;
+             position: fixed;
+             z-index: 2000;
+             left: 0;
+             top: 0;
+             width: 100%;
+             height: 100%;
+             background-color: rgba(0, 0, 0, 0.5);
+             animation: fadeIn 0.3s ease-in-out;
+         }
+
+         .modal.show {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+         }
+
+         @keyframes fadeIn {
+             from { opacity: 0; }
+             to { opacity: 1; }
+         }
+
+         .modal-content {
+             background: white;
+             padding: 2.5vw;
+             border-radius: 8px;
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+             max-width: 70vw;
+             width: 90%;
+             max-height: 80vh;
+             overflow-y: auto;
+             animation: slideUp 0.3s ease-out;
+         }
+
+         @keyframes slideUp {
+             from {
+                 transform: translateY(20px);
+                 opacity: 0;
+             }
+             to {
+                 transform: translateY(0);
+                 opacity: 1;
+             }
+         }
+
+         .modal-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 2vw;
+             border-bottom: 2px solid #e0e0e0;
+             padding-bottom: 1vw;
+         }
+
+         .modal-title {
+             font-size: 1.8vw;
+             font-weight: 700;
+             color: #1a1a1a;
+         }
+
+         .modal-close {
+             font-size: 1.5vw;
+             cursor: pointer;
+             color: #666;
+             transition: color 0.2s;
+         }
+
+         .modal-close:hover {
+             color: #1a1a1a;
+         }
+
+         .patients-table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 1vw;
+         }
+
+         .patients-table th {
+             text-align: left;
+             padding: 1vw;
+             background: #f5f5f5;
+             font-size: 0.95vw;
+             font-weight: 700;
+             color: #1a1a1a;
+             border-bottom: 2px solid #e0e0e0;
+         }
+
+         .patients-table td {
+             padding: 1vw;
+             font-size: 0.9vw;
+             color: #4a4a4a;
+             border-bottom: 1px solid #e0e0e0;
+         }
+
+         .patients-table tr:hover {
+             background: #f9f9f9;
+         }
+
          @media (max-width: 968px) {
             .top-header,
             .main-nav,
@@ -1162,6 +1276,77 @@
     </style>
 </head>
 <body>
+    <!-- Patients Information Modal -->
+    <div id="patientsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Patients & Claims</div>
+                <span class="modal-close" onclick="closePatientsModal(); return false;">&times;</span>
+            </div>
+            <table class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Member ID</th>
+                        <th>Claim Numbers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Smith</td>
+                        <td>MEM-10001</td>
+                        <td>34567, 34568, 34569</td>
+                    </tr>
+                    <tr>
+                        <td>Sarah Johnson</td>
+                        <td>MEM-10002</td>
+                        <td>45678, 45679</td>
+                    </tr>
+                    <tr>
+                        <td>Michael Chen</td>
+                        <td>MEM-10003</td>
+                        <td>56789, 56790</td>
+                    </tr>
+                    <tr>
+                        <td>Emily Rodriguez</td>
+                        <td>MEM-10004</td>
+                        <td>67891, 67892, 67893</td>
+                    </tr>
+                    <tr>
+                        <td>David Thompson</td>
+                        <td>MEM-10005</td>
+                        <td>78902, 78903</td>
+                    </tr>
+                    <tr>
+                        <td>Jessica Martinez</td>
+                        <td>MEM-10006</td>
+                        <td>89013, 89014</td>
+                    </tr>
+                    <tr>
+                        <td>Robert Williams</td>
+                        <td>MEM-10007</td>
+                        <td>90124, 90125</td>
+                    </tr>
+                    <tr>
+                        <td>Lisa Anderson</td>
+                        <td>MEM-10008</td>
+                        <td>01235, 01236</td>
+                    </tr>
+                    <tr>
+                        <td>James Lee</td>
+                        <td>MEM-10009</td>
+                        <td>12346</td>
+                    </tr>
+                    <tr>
+                        <td>Patricia Brown</td>
+                        <td>MEM-10010</td>
+                        <td>23457</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Login Page -->
     <div id="login-page" class="login-page active">
         <div class="login-logo-container">
@@ -1232,6 +1417,7 @@
             <div class="support-links">
                 <a href="#" class="header-link">Support and Training</a>
                 <a href="#" class="header-link">System Status</a>
+                <span class="help-icon" onclick="openPatientsModal(); return false;" title="View Patients and Claims">ℹ️</span>
             </div>
         </div>
     </div>
@@ -1617,9 +1803,69 @@
         window.addEventListener('load', function() {
             showLoginPage();
         });
+
+        // Modal functions for patients information
+        function openPatientsModal() {
+            document.getElementById('patientsModal').classList.add('show');
+        }
+
+        function closePatientsModal() {
+            document.getElementById('patientsModal').classList.remove('show');
+        }
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('patientsModal');
+            if (event.target === modal) {
+                closePatientsModal();
+            }
+        });
     </script>
 
     <script>
+        // Claims Database - Multiple patients and claims
+        const claimsDatabase = [
+            // Patient 1: John Smith
+            { id: 'CLM-001', patientName: 'John Smith', memberId: 'MEM-10001', claimNumber: '34567', serviceDate: '01/15/2024', billedAmount: '$1,250.00', status: 'Paid', statusClass: 'paid', paidAmount: '$1,250.00', eobFile: 'eobs/eob_one.pdf' },
+            { id: 'CLM-002', patientName: 'John Smith', memberId: 'MEM-10001', claimNumber: '34568', serviceDate: '02/20/2024', billedAmount: '$850.00', status: 'Partially Paid', statusClass: 'partial', paidAmount: '$680.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-003', patientName: 'John Smith', memberId: 'MEM-10001', claimNumber: '34569', serviceDate: '03/10/2024', billedAmount: '$500.00', status: 'Denied', statusClass: 'denied', paidAmount: '$0.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 2: Sarah Johnson
+            { id: 'CLM-004', patientName: 'Sarah Johnson', memberId: 'MEM-10002', claimNumber: '45678', serviceDate: '01/22/2024', billedAmount: '$2,100.00', status: 'Paid', statusClass: 'paid', paidAmount: '$2,100.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-005', patientName: 'Sarah Johnson', memberId: 'MEM-10002', claimNumber: '45679', serviceDate: '02/15/2024', billedAmount: '$650.00', status: 'Paid', statusClass: 'paid', paidAmount: '$650.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 3: Michael Chen
+            { id: 'CLM-006', patientName: 'Michael Chen', memberId: 'MEM-10003', claimNumber: '56789', serviceDate: '01/10/2024', billedAmount: '$1,800.00', status: 'Denied', statusClass: 'denied', paidAmount: '$0.00', eobFile: 'eobs/eob_one.pdf' },
+            { id: 'CLM-007', patientName: 'Michael Chen', memberId: 'MEM-10003', claimNumber: '56790', serviceDate: '03/05/2024', billedAmount: '$1,200.00', status: 'Partially Paid', statusClass: 'partial', paidAmount: '$900.00', eobFile: 'eobs/eob_two.pdf' },
+            
+            // Patient 4: Emily Rodriguez
+            { id: 'CLM-008', patientName: 'Emily Rodriguez', memberId: 'MEM-10004', claimNumber: '67891', serviceDate: '02/08/2024', billedAmount: '$750.00', status: 'Paid', statusClass: 'paid', paidAmount: '$750.00', eobFile: 'eobs/eob_one.pdf' },
+            { id: 'CLM-009', patientName: 'Emily Rodriguez', memberId: 'MEM-10004', claimNumber: '67892', serviceDate: '03/12/2024', billedAmount: '$950.00', status: 'Paid', statusClass: 'paid', paidAmount: '$950.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-010', patientName: 'Emily Rodriguez', memberId: 'MEM-10004', claimNumber: '67893', serviceDate: '03/25/2024', billedAmount: '$1,100.00', status: 'Denied', statusClass: 'denied', paidAmount: '$0.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 5: David Thompson
+            { id: 'CLM-011', patientName: 'David Thompson', memberId: 'MEM-10005', claimNumber: '78902', serviceDate: '01/30/2024', billedAmount: '$900.00', status: 'Partially Paid', statusClass: 'partial', paidAmount: '$540.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-012', patientName: 'David Thompson', memberId: 'MEM-10005', claimNumber: '78903', serviceDate: '02/28/2024', billedAmount: '$1,350.00', status: 'Paid', statusClass: 'paid', paidAmount: '$1,350.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 6: Jessica Martinez
+            { id: 'CLM-013', patientName: 'Jessica Martinez', memberId: 'MEM-10006', claimNumber: '89013', serviceDate: '01/18/2024', billedAmount: '$1,600.00', status: 'Paid', statusClass: 'paid', paidAmount: '$1,600.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-014', patientName: 'Jessica Martinez', memberId: 'MEM-10006', claimNumber: '89014', serviceDate: '03/08/2024', billedAmount: '$700.00', status: 'Denied', statusClass: 'denied', paidAmount: '$0.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 7: Robert Williams
+            { id: 'CLM-015', patientName: 'Robert Williams', memberId: 'MEM-10007', claimNumber: '90124', serviceDate: '02/05/2024', billedAmount: '$1,950.00', status: 'Paid', statusClass: 'paid', paidAmount: '$1,950.00', eobFile: 'eobs/eob_one.pdf' },
+            { id: 'CLM-016', patientName: 'Robert Williams', memberId: 'MEM-10007', claimNumber: '90125', serviceDate: '03/20/2024', billedAmount: '$800.00', status: 'Partially Paid', statusClass: 'partial', paidAmount: '$480.00', eobFile: 'eobs/eob_two.pdf' },
+            
+            // Patient 8: Lisa Anderson
+            { id: 'CLM-017', patientName: 'Lisa Anderson', memberId: 'MEM-10008', claimNumber: '01235', serviceDate: '01/25/2024', billedAmount: '$1,100.00', status: 'Paid', statusClass: 'paid', paidAmount: '$1,100.00', eobFile: 'eobs/eob_two.pdf' },
+            { id: 'CLM-018', patientName: 'Lisa Anderson', memberId: 'MEM-10008', claimNumber: '01236', serviceDate: '02/14/2024', billedAmount: '$600.00', status: 'Paid', statusClass: 'paid', paidAmount: '$600.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 9: James Lee
+            { id: 'CLM-019', patientName: 'James Lee', memberId: 'MEM-10009', claimNumber: '12346', serviceDate: '01/12/2024', billedAmount: '$2,200.00', status: 'Denied', statusClass: 'denied', paidAmount: '$0.00', eobFile: 'eobs/eob_one.pdf' },
+            
+            // Patient 10: Patricia Brown
+            { id: 'CLM-020', patientName: 'Patricia Brown', memberId: 'MEM-10010', claimNumber: '23457', serviceDate: '02/22/2024', billedAmount: '$850.00', status: 'Partially Paid', statusClass: 'partial', paidAmount: '$637.50', eobFile: 'eobs/eob_two.pdf' }
+        ];
+
         function showView(viewName) {
             // Hide all views
             document.querySelectorAll('.view-container').forEach(view => {
@@ -1641,116 +1887,113 @@
             event.target.classList.add('active');
         }
 
-         function downloadEOB(claimId) {
-             // Map claim IDs to EOB PDF files based on claim index
-             // First claim -> eob_one.pdf, Second claim -> eob_two.pdf, Third claim -> eob_one.pdf
-             const claimIndex = claimId.split('-')[1]; // Get the number after the dash
-             let eobPath;
-             
-             if (claimIndex === '001') {
-                 eobPath = 'eobs/eob_one.pdf';
-             } else if (claimIndex === '002') {
-                 eobPath = 'eobs/eob_two.pdf';
-             } else {
-                 eobPath = 'eobs/eob_one.pdf'; // Default to eob_one for third claim
-             }
+        function downloadEOB(claimId) {
+            // Find the claim in database to get EOB file
+            const claim = claimsDatabase.find(c => c.id === claimId);
+            if (claim) {
+                window.open(claim.eobFile, '_blank');
+            }
+        }
 
-             // Open EOB PDF in a new tab
-             window.open(eobPath, '_blank');
-         }
+        function searchClaims() {
+            // Get form values
+            const patientName = document.getElementById('patientName').value.trim().toLowerCase();
+            const memberId = document.getElementById('memberId').value.trim().toUpperCase();
+            const claimNumber = document.getElementById('claimNumber').value.trim();
+            const claimId = document.getElementById('claimId').value.trim().toUpperCase();
+            const serviceDateFrom = document.getElementById('serviceDateFrom').value;
+            const serviceDateTo = document.getElementById('serviceDateTo').value;
 
-         function searchClaims() {
-             // Hide message, show results
-             document.getElementById('claimsMessage').style.display = 'none';
-             document.getElementById('resultsHeader').style.display = 'flex';
-             document.getElementById('claimsActions').style.display = 'flex';
-             document.getElementById('claimsResults').style.display = 'block';
+            // Parse service date range if provided
+            let fromDate = serviceDateFrom ? new Date(serviceDateFrom) : null;
+            let toDate = serviceDateTo ? new Date(serviceDateTo) : null;
 
-             // Get form values
-             const patientName = document.getElementById('patientName').value;
-             const memberId = document.getElementById('memberId').value;
-             const claimId = document.getElementById('claimId').value;
-             const serviceDateFrom = document.getElementById('serviceDateFrom').value;
-             const serviceDateTo = document.getElementById('serviceDateTo').value;
+            // Filter claims based on search criteria
+            let filteredClaims = claimsDatabase.filter(claim => {
+                // If patient name is provided, it must match (case-insensitive, partial match)
+                if (patientName && !claim.patientName.toLowerCase().includes(patientName)) {
+                    return false;
+                }
 
-             // Format dates if provided
-             let serviceDateFromFormatted = '';
-             let serviceDateToFormatted = '';
-             if (serviceDateFrom) {
-                 const fromDate = new Date(serviceDateFrom + 'T00:00:00');
-                 serviceDateFromFormatted = fromDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-             }
-             if (serviceDateTo) {
-                 const toDate = new Date(serviceDateTo + 'T00:00:00');
-                 serviceDateToFormatted = toDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-             }
+                // If member ID is provided, it must match exactly
+                if (memberId && claim.memberId !== memberId) {
+                    return false;
+                }
 
-             // Generate claims data based on search
-             const claims = [
-                 {
-                     id: (claimId || '34567') + '-001',
-                     patientName: patientName || 'Feverick',
-                     memberId: memberId || '23456',
-                     serviceDate: serviceDateFromFormatted || '01/01/2002',
-                     billedAmount: '$1,250.00',
-                     status: 'Denied',
-                     statusClass: 'denied',
-                     paidAmount: '$0.00',
-                     eobFile: 'eobs/eob_one.pdf'
-                 },
-                 {
-                     id: (claimId || '34567') + '-002',
-                     patientName: patientName || 'Feverick',
-                     memberId: memberId || '23456',
-                     serviceDate: serviceDateToFormatted || '01/02/2002',
-                     billedAmount: '$850.00',
-                     status: 'Paid',
-                     statusClass: 'paid',
-                     paidAmount: '$850.00',
-                     eobFile: 'eobs/eob_two.pdf'
-                 },
-                 {
-                     id: (claimId || '34567') + '-003',
-                     patientName: patientName || 'Feverick',
-                     memberId: memberId || '23456',
-                     serviceDate: serviceDateToFormatted || '01/02/2002',
-                     billedAmount: '$1,500.00',
-                     status: 'Partially Paid',
-                     statusClass: 'partial',
-                     paidAmount: '$900.00',
-                     eobFile: 'eobs/eob_one.pdf'
-                 }
-             ];
+                // If claim number is provided, it must match exactly
+                if (claimNumber && claim.claimNumber !== claimNumber) {
+                    return false;
+                }
 
-             // Update results count
-             document.getElementById('resultsCount').textContent = claims.length + ' Results';
+                // If claim ID is provided, it must match exactly
+                if (claimId && claim.id !== claimId) {
+                    return false;
+                }
 
-             // Populate table
-             const tbody = document.getElementById('claimsTableBody');
-             tbody.innerHTML = claims.map(claim => `
-                 <tr>
-                     <td><input type="checkbox"></td>
-                     <td>${claim.id}</td>
-                     <td>${claim.patientName}</td>
-                     <td>${claim.memberId}</td>
-                     <td>${claim.serviceDate}</td>
-                     <td>${claim.billedAmount}</td>
-                     <td><span class="status-badge status-${claim.statusClass}">${claim.status}</span></td>
-                     <td>${claim.paidAmount}</td>
-                     <td>
-                         <button class="eob-button" id="eob-btn-${claim.id}" data-claim-id="${claim.id}" data-patient-name="${claim.patientName}" data-member-id="${claim.memberId}" onclick="downloadEOB('${claim.id}')" title="View EOB for ${claim.patientName} - ${claim.id}" aria-label="EOB button for claim ${claim.id}, patient ${claim.patientName}">📄 EOB</button>
-                     </td>
-                 </tr>
-             `).join('');
+                // If service date range is provided, claim date must fall within it
+                if (fromDate || toDate) {
+                    const [month, day, year] = claim.serviceDate.split('/');
+                    const claimDate = new Date(year, month - 1, day);
 
-             // Scroll to results table
-             setTimeout(() => {
-                 const resultsHeader = document.getElementById('resultsHeader');
-                 if (resultsHeader) {
-                     resultsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                 }
-             }, 100);
-         }
+                    if (fromDate && claimDate < fromDate) {
+                        return false;
+                    }
+
+                    if (toDate && claimDate > toDate) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Show results or message
+            if (filteredClaims.length === 0) {
+                document.getElementById('claimsMessage').style.display = 'block';
+                document.getElementById('resultsHeader').style.display = 'none';
+                document.getElementById('claimsActions').style.display = 'none';
+                document.getElementById('claimsResults').style.display = 'none';
+                document.getElementById('claimsMessage').innerHTML = `
+                    <div class="claims-message-icon">🔍</div>
+                    <div class="claims-message-text">No claims found.</div>
+                    <div class="claims-message-subtext">Try adjusting your search criteria.</div>
+                `;
+            } else {
+                document.getElementById('claimsMessage').style.display = 'none';
+                document.getElementById('resultsHeader').style.display = 'flex';
+                document.getElementById('claimsActions').style.display = 'flex';
+                document.getElementById('claimsResults').style.display = 'block';
+
+                // Update results count
+                document.getElementById('resultsCount').textContent = filteredClaims.length + ' Results';
+
+                // Populate table
+                const tbody = document.getElementById('claimsTableBody');
+                tbody.innerHTML = filteredClaims.map(claim => `
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>${claim.id}</td>
+                        <td>${claim.patientName}</td>
+                        <td>${claim.memberId}</td>
+                        <td>${claim.serviceDate}</td>
+                        <td>${claim.billedAmount}</td>
+                        <td><span class="status-badge status-${claim.statusClass}">${claim.status}</span></td>
+                        <td>${claim.paidAmount}</td>
+                        <td>
+                            <button class="eob-button" id="eob-btn-${claim.id}" data-claim-id="${claim.id}" data-patient-name="${claim.patientName}" data-member-id="${claim.memberId}" onclick="downloadEOB('${claim.id}')" title="View EOB for ${claim.patientName} - ${claim.id}" aria-label="EOB button for claim ${claim.id}, patient ${claim.patientName}">📄 EOB</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Scroll to results table
+            setTimeout(() => {
+                const resultsHeader = document.getElementById('resultsHeader');
+                if (resultsHeader) {
+                    resultsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
 
         // Handle service date option change
         document.getElementById('serviceDateOption')?.addEventListener('change', function() {
