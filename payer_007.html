@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legit Payer</title>
+  <style>
+    :root {
+      --bg: #f3f5f7;
+      --card: #ffffff;
+      --ink: #15202b;
+      --muted: #5a6570;
+      --brand: #0a3d62;
+      --brand-2: #0f5f8a;
+      --line: #d8e0e8;
+      --ok: #188b4f;
+      --warn: #cc8a00;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #ffffff 0%, #f3f5f7 35%, #e8edf3 100%);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 940px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(10, 30, 50, 0.08);
+      overflow: hidden;
+    }
+
+    .app-header {
+      padding: 24px 28px;
+      color: #fff;
+      background: linear-gradient(110deg, var(--brand), var(--brand-2));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .brand-sub {
+      margin: 6px 0 0;
+      font-size: 0.88rem;
+      opacity: 0.88;
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      background: #fff;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      color: #102131;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    input, select {
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 0 12px;
+      font-size: 0.95rem;
+      color: #102131;
+      background: #fff;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #8ab2cc;
+      box-shadow: 0 0 0 3px rgba(15, 95, 138, 0.14);
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(120deg, var(--brand), var(--brand-2));
+    }
+
+    .btn-secondary {
+      background: #eff4f8;
+      color: #173041;
+      border: 1px solid #d8e4ee;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .msg {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: #b33434;
+      min-height: 1.2rem;
+    }
+
+    .summary {
+      background: #f5f9fc;
+      border: 1px solid #d9e7f2;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: #1b3445;
+    }
+
+    .results-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #e5edf4;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: #f7fafc;
+      color: #264254;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      font-size: 0.79rem;
+      padding: 4px 9px;
+      font-weight: 600;
+    }
+
+    .status.paid {
+      color: var(--ok);
+      background: #e9f7ef;
+      border: 1px solid #bce7cc;
+    }
+
+    .status.pending {
+      color: var(--warn);
+      background: #fff7e4;
+      border: 1px solid #f2dba0;
+    }
+
+    @media (max-width: 740px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .app-header, .main {
+        padding: 18px;
+      }
+      .card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1 class="brand-title">Legit Payer</h1>
+        <p class="brand-sub">Claims Validation & Payment Insight</p>
+      </div>
+    </header>
+
+    <main class="main">
+      <section id="loginView" class="card">
+        <h2>Secure Sign In</h2>
+        <form id="loginForm" autocomplete="off">
+          <div class="grid">
+            <div class="field">
+              <label for="username">Username</label>
+              <input id="username" name="username" type="text" required />
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" required />
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn-primary">Sign In</button>
+          </div>
+        </form>
+        <p class="muted">Authorized users only.</p>
+        <div id="loginMsg" class="msg"></div>
+      </section>
+
+      <section id="claimView" class="card hidden">
+        <h2>Claim Lookup</h2>
+        <form id="claimForm">
+          <div class="grid">
+            <div class="field full">
+              <label for="provider">Provider Selection</label>
+              <select id="provider" required>
+                <option value="">Select provider</option>
+                <option>Arcadia Medical Group</option>
+                <option>NorthBay Clinical Services</option>
+                <option>SummitCare Health Network</option>
+                <option>Horizon Family Practice</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="patientName">Patient Name</label>
+              <input id="patientName" type="text" required />
+            </div>
+            <div class="field">
+              <label for="dob">DOB</label>
+              <input id="dob" type="date" required />
+            </div>
+            <div class="field">
+              <label for="dosFrom">Date of Service From</label>
+              <input id="dosFrom" type="date" required />
+            </div>
+            <div class="field">
+              <label for="dosTo">Date of Service To</label>
+              <input id="dosTo" type="date" required />
+            </div>
+            <div class="field">
+              <label for="memberId">Member ID</label>
+              <input id="memberId" type="text" required />
+            </div>
+            <div class="field full">
+              <label for="claimNo">Claim Number</label>
+              <input id="claimNo" type="text" required />
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn-primary">Get Claim Results</button>
+            <button type="button" id="logoutBtn" class="btn-secondary">Log Out</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="resultsView" class="card hidden">
+        <h2>Claim Results</h2>
+        <div id="summary" class="summary"></div>
+        <div class="results-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Check Date</th>
+                <th>Paid Amount</th>
+                <th>Asked Amount</th>
+                <th>Claim Status</th>
+                <th>EOB</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button type="button" id="backBtn" class="btn-secondary">Back to Form</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const AUTH = { username: "payer_07", password: "payer7127" };
+    const CLAIMS = [
+      {
+        provider: "Arcadia Medical Group",
+        patientName: "Olivia Bennett",
+        dob: "1990-04-18",
+        dosFrom: "2026-02-01",
+        dosTo: "2026-02-10",
+        memberId: "MBR1001",
+        claimNo: "CLM90001",
+        claim_result: {
+          check_date: "2026-02-22",
+          paid_amount: "$520.00",
+          asked_amount: "$620.00",
+          status: "Partially Paid"
+        },
+        claim_result_summarization: "Primary office and laboratory services were adjudicated. Contracted rate adjustments applied and member deductible reduced payable total."
+      },
+      {
+        provider: "NorthBay Clinical Services",
+        patientName: "Noah Carter",
+        dob: "1985-09-03",
+        dosFrom: "2026-01-12",
+        dosTo: "2026-01-20",
+        memberId: "MBR1002",
+        claimNo: "CLM90002",
+        claim_result: {
+          check_date: "2026-02-03",
+          paid_amount: "$300.00",
+          asked_amount: "$300.00",
+          status: "Paid"
+        },
+        claim_result_summarization: "Claim processed within timely filing and coverage rules. Allowed amount equals submitted amount and has been paid in full."
+      },
+      {
+        provider: "SummitCare Health Network",
+        patientName: "Emma Hughes",
+        dob: "1978-12-11",
+        dosFrom: "2026-03-02",
+        dosTo: "2026-03-05",
+        memberId: "MBR1003",
+        claimNo: "CLM90003",
+        claim_result: {
+          check_date: "2026-03-14",
+          paid_amount: "$760.00",
+          asked_amount: "$840.00",
+          status: "Partially Paid"
+        },
+        claim_result_summarization: "Inpatient/outpatient services reviewed and repriced to fee schedule. Non-covered balance remains member/provider responsibility."
+      },
+      {
+        provider: "Horizon Family Practice",
+        patientName: "Liam Walker",
+        dob: "1994-06-27",
+        dosFrom: "2026-02-14",
+        dosTo: "2026-02-14",
+        memberId: "MBR1004",
+        claimNo: "CLM90004",
+        claim_result: {
+          check_date: "2026-02-20",
+          paid_amount: "$150.00",
+          asked_amount: "$150.00",
+          status: "Paid"
+        },
+        claim_result_summarization: "Preventive evaluation service met plan criteria and was reimbursed as submitted."
+      },
+      {
+        provider: "Arcadia Medical Group",
+        patientName: "Sophia Reed",
+        dob: "1989-01-19",
+        dosFrom: "2026-03-08",
+        dosTo: "2026-03-12",
+        memberId: "MBR1005",
+        claimNo: "CLM90005",
+        claim_result: {
+          check_date: "2026-03-25",
+          paid_amount: "$0.00",
+          asked_amount: "$410.00",
+          status: "Pending Review"
+        },
+        claim_result_summarization: "Documentation is pending for medical necessity review. Final payment decision will be issued after records are validated."
+      },
+      {
+        provider: "NorthBay Clinical Services",
+        patientName: "Mason Price",
+        dob: "1972-11-05",
+        dosFrom: "2026-01-30",
+        dosTo: "2026-02-02",
+        memberId: "MBR1006",
+        claimNo: "CLM90006",
+        claim_result: {
+          check_date: "2026-02-08",
+          paid_amount: "$260.00",
+          asked_amount: "$340.00",
+          status: "Partially Paid"
+        },
+        claim_result_summarization: "Claim line-level adjustments applied due to plan maximum and negotiated rates; remaining amount not payable under current benefit limits."
+      },
+      {
+        provider: "SummitCare Health Network",
+        patientName: "Ava Simmons",
+        dob: "1998-07-22",
+        dosFrom: "2026-02-24",
+        dosTo: "2026-02-28",
+        memberId: "MBR1007",
+        claimNo: "CLM90007",
+        claim_result: {
+          check_date: "2026-03-04",
+          paid_amount: "$520.00",
+          asked_amount: "$520.00",
+          status: "Paid"
+        },
+        claim_result_summarization: "Covered specialty services paid at contracted rate with no patient liability remaining."
+      },
+      {
+        provider: "Horizon Family Practice",
+        patientName: "Ethan Brooks",
+        dob: "1969-03-15",
+        dosFrom: "2026-03-10",
+        dosTo: "2026-03-15",
+        memberId: "MBR1008",
+        claimNo: "CLM90008",
+        claim_result: {
+          check_date: "2026-03-26",
+          paid_amount: "$290.00",
+          asked_amount: "$370.00",
+          status: "Partially Paid"
+        },
+        claim_result_summarization: "Professional services were partially reimbursed after deductible and non-covered service-code edits."
+      },
+      {
+        provider: "Arcadia Medical Group",
+        patientName: "Isabella Cruz",
+        dob: "1983-10-09",
+        dosFrom: "2026-01-05",
+        dosTo: "2026-01-08",
+        memberId: "MBR1009",
+        claimNo: "CLM90009",
+        claim_result: {
+          check_date: "2026-01-21",
+          paid_amount: "$190.00",
+          asked_amount: "$285.00",
+          status: "Partially Paid"
+        },
+        claim_result_summarization: "Claim met eligibility checks; payment reduced by standard co-insurance and fee schedule differentials."
+      },
+      {
+        provider: "SummitCare Health Network",
+        patientName: "James Patel",
+        dob: "1976-05-30",
+        dosFrom: "2026-02-18",
+        dosTo: "2026-02-25",
+        memberId: "MBR1010",
+        claimNo: "CLM90010",
+        claim_result: {
+          check_date: "2026-03-11",
+          paid_amount: "$0.00",
+          asked_amount: "$375.00",
+          status: "Pending Review"
+        },
+        claim_result_summarization: "Claim routed to prepayment audit because diagnosis-to-procedure linkage requires additional clinical documentation."
+      }
+    ];
+    const loginView = document.getElementById("loginView");
+    const claimView = document.getElementById("claimView");
+    const resultsView = document.getElementById("resultsView");
+    const loginMsg = document.getElementById("loginMsg");
+    const summary = document.getElementById("summary");
+    const resultsBody = document.getElementById("resultsBody");
+    const EOB_BY_STATUS = {
+      "Paid": "eobs/paid.pdf",
+      "Partially Paid": "eobs/partially_paid.pdf",
+      "Pending Review": "eobs/pending_review.pdf"
+    };
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username === AUTH.username && password === AUTH.password) {
+        loginMsg.textContent = "";
+        loginView.classList.add("hidden");
+        claimView.classList.remove("hidden");
+      } else {
+        loginMsg.textContent = "Invalid username or password.";
+      }
+    });
+
+    document.getElementById("claimForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const provider = document.getElementById("provider").value;
+      const patientName = document.getElementById("patientName").value.trim();
+      const dob = document.getElementById("dob").value;
+      const dosFrom = document.getElementById("dosFrom").value;
+      const dosTo = document.getElementById("dosTo").value;
+      const memberId = document.getElementById("memberId").value.trim();
+      const claimNo = document.getElementById("claimNo").value.trim();
+
+      if (new Date(dosTo) < new Date(dosFrom)) {
+        alert("Date of Service To cannot be earlier than Date of Service From.");
+        return;
+      }
+
+      const match = CLAIMS.find((c) =>
+        c.provider === provider &&
+        c.patientName.toLowerCase() === patientName.toLowerCase() &&
+        c.dob === dob &&
+        c.dosFrom === dosFrom &&
+        c.dosTo === dosTo &&
+        c.memberId.toLowerCase() === memberId.toLowerCase() &&
+        c.claimNo.toLowerCase() === claimNo.toLowerCase()
+      );
+
+      const baseSummary =
+        "Provider: " + provider +
+        " | Patient: " + patientName +
+        " | DOB: " + dob +
+        " | DOS From: " + dosFrom +
+        " | DOS To: " + dosTo +
+        " | Member ID: " + memberId +
+        " | Claim #: " + claimNo;
+
+      summary.innerHTML = match
+        ? baseSummary + "<br/>Adjudication Summary: " + match.claim_result_summarization
+        : baseSummary;
+
+      const rows = match ? [match.claim_result] : [];
+
+      if (!rows.length) {
+        resultsBody.innerHTML = `
+          <tr>
+            <td colspan="5">No claim records found for the entered details.</td>
+          </tr>
+        `;
+      } else {
+        resultsBody.innerHTML = rows.map((r) => {
+          const statusClass = r.status === "Paid" ? "paid" : "pending";
+          const eobFile = EOB_BY_STATUS[r.status] || "";
+          return `
+            <tr>
+              <td>${r.check_date}</td>
+              <td>${r.paid_amount}</td>
+              <td>${r.asked_amount}</td>
+              <td><span class="status ${statusClass}">${r.status}</span></td>
+              <td><button type="button" class="btn-secondary download-eob" data-eob="${eobFile}">Download EOB</button></td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      claimView.classList.add("hidden");
+      resultsView.classList.remove("hidden");
+    });
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      resultsView.classList.add("hidden");
+      claimView.classList.remove("hidden");
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      claimView.classList.add("hidden");
+      resultsView.classList.add("hidden");
+      loginView.classList.remove("hidden");
+      document.getElementById("loginForm").reset();
+      document.getElementById("claimForm").reset();
+      loginMsg.textContent = "";
+    });
+
+    resultsBody.addEventListener("click", (e) => {
+      const button = e.target.closest(".download-eob");
+      if (!button) return;
+
+      const file = button.getAttribute("data-eob");
+      if (!file) {
+        alert("No EOB file is available for this claim status.");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = file;
+      link.download = file.split("/").pop();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+  </script>
+</body>
+</html>
