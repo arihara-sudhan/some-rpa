@@ -348,11 +348,22 @@
       return btn;
     }
 
-    function maybeShowRandomInterruption() {
-      const shouldInterrupt = Math.random() < 0.7;
-      if (!shouldInterrupt) return Promise.resolve();
+    let lastInterruptKind = -1;
 
-      const kind = Math.floor(Math.random() * 3);
+    function pickInterruptKind() {
+      if (lastInterruptKind < 0) {
+        lastInterruptKind = Math.floor(Math.random() * 3);
+        return lastInterruptKind;
+      }
+
+      const choices = [0, 1, 2].filter((value) => value !== lastInterruptKind);
+      const next = choices[Math.floor(Math.random() * choices.length)];
+      lastInterruptKind = next;
+      return next;
+    }
+
+    function maybeShowRandomInterruption() {
+      const kind = pickInterruptKind();
       interruptLayer.style.display = "flex";
 
       return new Promise((resolve) => {
