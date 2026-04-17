@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alpha to Omega</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Inputs</h2>
+
+    <input type="text" id="alpha" placeholder="Alpha">
+    <input type="text" id="beta" placeholder="Beta">
+    <input type="text" id="gamma" placeholder="Gamma">
+    <input type="text" id="delta" placeholder="Delta">
+    <input type="text" id="epsilon" placeholder="Epsilon">
+    <input type="text" id="zeta" placeholder="Zeta">
+    <input type="text" id="eta" placeholder="Eta">
+    <input type="text" id="theta" placeholder="Theta">
+    <input type="text" id="lambda" placeholder="Lambda">
+    <input type="text" id="omega" placeholder="Omega">
+
+    <button onclick="submitForm()">Submit</button>
+</div>
+
+<script>
+    function submitForm() {
+        const values = {
+            alpha: document.getElementById("alpha").value,
+            beta: document.getElementById("beta").value,
+            gamma: document.getElementById("gamma").value,
+            delta: document.getElementById("delta").value,
+            epsilon: document.getElementById("epsilon").value,
+            zeta: document.getElementById("zeta").value,
+            eta: document.getElementById("eta").value,
+            theta: document.getElementById("theta").value,
+            lambda: document.getElementById("lambda").value,
+            omega: document.getElementById("omega").value
+        };
+
+        alert("THANK YOU");
+    }
+</script>
+
+</body>
+</html>
