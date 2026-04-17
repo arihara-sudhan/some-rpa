@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>HOORAY</title>
-        <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
@@ -12,7 +12,8 @@
             height: 100vh;
         }
 
-        form {
+        /* Wrapper instead of form */
+        div {
             background-color: white;
             padding: 25px 30px;
             border-radius: 10px;
@@ -58,24 +59,27 @@
 </head>
 <body>
 
-    <h2 id="one">HOORAY</h2>
+    <div>
+        <h2 id="one">HOORAY</h2>
 
-    <label id="two" for="name">Name:</label><br>
-    <input type="text" id="three" name="name"><br><br>
+        <label id="two" for="name">Name:</label>
+        <input type="text" id="three" name="name">
 
-    <label id="four" for="age">Age:</label><br>
-    <input type="number" id="five" name="age"><br><br>
+        <label id="four" for="age">Age:</label>
+        <input type="number" id="five" name="age">
 
-    <label id="six" for="email">Email:</label><br>
-    <input type="email" id="seven" name="email"><br><br>
+        <label id="six" for="email">Email:</label>
+        <input type="email" id="seven" name="email">
 
-    <label id="eight" for="gender">Gender:</label><br>
-    <select id="nine" name="gender">
-        <option id="ten" value="male">Male</option>
-        <option id="eleven" value="female">Female</option>
-        <option id="twelve" value="other">Other</option>
-    </select><br><br>
-    <button id="fifteen">Submit</button>
+        <label id="eight" for="gender">Gender:</label>
+        <select id="nine" name="gender">
+            <option id="ten" value="male">Male</option>
+            <option id="eleven" value="female">Female</option>
+            <option id="twelve" value="other">Other</option>
+        </select>
+
+        <button id="fifteen">Submit</button>
+    </div>
 
 </body>
 </html>
