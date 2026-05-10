@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Five Patients - Claim Status Portal</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background: linear-gradient(135deg,#0f172a,#1e3a8a);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:25px;
+    }
+
+    .card{
+      width:100%;
+      max-width:950px;
+      background:white;
+      border-radius:20px;
+      padding:35px;
+      box-shadow:0 10px 35px rgba(0,0,0,0.35);
+      animation:fadeIn 0.5s ease;
+    }
+
+    .title{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .title h1{
+      font-size:36px;
+      color:#0f172a;
+      margin-bottom:8px;
+    }
+
+    .title p{
+      color:#64748b;
+      font-size:15px;
+    }
+
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:bold;
+      color:#334155;
+    }
+
+    .input-group input{
+      width:100%;
+      padding:13px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    .input-group input:focus{
+      outline:none;
+      border-color:#2563eb;
+      box-shadow:0 0 0 3px rgba(37,99,235,0.2);
+    }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#2563eb;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      background:#1d4ed8;
+    }
+
+    .error{
+      margin-top:18px;
+      padding:12px;
+      border-radius:10px;
+      background:#fee2e2;
+      color:#991b1b;
+      border-left:5px solid #dc2626;
+      display:none;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .full-width{
+      grid-column:1 / -1;
+    }
+
+    .result{
+      margin-top:30px;
+      padding:22px;
+      border-radius:14px;
+      display:none;
+    }
+
+    .success{
+      background:#dcfce7;
+      border-left:6px solid #16a34a;
+      color:#166534;
+    }
+
+    .warning{
+      background:#fef9c3;
+      border-left:6px solid #ca8a04;
+      color:#854d0e;
+    }
+
+    .danger{
+      background:#fee2e2;
+      border-left:6px solid #dc2626;
+      color:#991b1b;
+    }
+
+    .info{
+      background:#dbeafe;
+      border-left:6px solid #2563eb;
+      color:#1d4ed8;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(15px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media(max-width:768px){
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .card{
+        padding:22px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN PAGE -->
+
+  <div class="card" id="loginPage">
+
+    <div class="title">
+      <h1>Five Patients</h1>
+      <p>Secure Claim Status Portal</p>
+    </div>
+
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+    </div>
+
+    <button class="btn" onclick="login()">
+      Login
+    </button>
+
+    <div class="error" id="loginError">
+      Invalid username or password.
+    </div>
+
+  </div>
+
+
+  <!-- CLAIM STATUS PAGE -->
+
+  <div class="card hidden" id="claimPage">
+
+    <div class="title">
+      <h1>Five Patients</h1>
+      <p>Claim Status Enquiry Portal</p>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="input-group">
+        <label>Member ID</label>
+        <input type="text" id="memberId">
+      </div>
+
+      <div class="input-group">
+        <label>Patient Last Name</label>
+        <input type="text" id="lastName">
+      </div>
+
+      <div class="input-group">
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+      </div>
+
+      <div class="input-group">
+        <label>Date of Service</label>
+        <input type="date" id="dos">
+      </div>
+
+      <div class="input-group">
+        <label>Claim Number</label>
+        <input type="text" id="claimNumber">
+      </div>
+
+      <div class="input-group">
+        <label>Provider Name</label>
+        <input type="text" id="providerName">
+      </div>
+
+      <div class="input-group full-width">
+        <label>Payer Name</label>
+        <input type="text" id="payerName">
+      </div>
+
+    </div>
+
+    <button class="btn" onclick="checkClaimStatus()">
+      Check Claim Status
+    </button>
+
+    <div id="result" class="result"></div>
+
+  </div>
+
+
+<script>
+
+  // LOGIN
+
+  function login(){
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if(username === "ari" && password === "verysecret2026"){
+
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("claimPage").classList.remove("hidden");
+
+    }
+
+    else{
+      document.getElementById("loginError").style.display = "block";
+    }
+  }
+
+
+  // HARDCODED PATIENT DATA
+
+  const patients = [
+
+    {
+      memberId: "M1001",
+      lastName: "smith",
+      dob: "1990-04-12",
+      dos: "2025-01-10",
+      claimNumber: "CLM9001",
+      providerName: "Apollo Hospital",
+      payerName: "Aetna",
+      status: "Paid",
+      reason: "Claim processed successfully. Full payment issued."
+    },
+
+    {
+      memberId: "M1002",
+      lastName: "johnson",
+      dob: "1988-07-22",
+      dos: "2025-02-15",
+      claimNumber: "CLM9002",
+      providerName: "City Care",
+      payerName: "Cigna",
+      status: "Denied",
+      reason: "Coverage inactive on date of service."
+    },
+
+    {
+      memberId: "M1003",
+      lastName: "williams",
+      dob: "1975-03-30",
+      dos: "2025-03-01",
+      claimNumber: "CLM9003",
+      providerName: "Global Clinic",
+      payerName: "UnitedHealth",
+      status: "Partially Paid",
+      reason: "Coinsurance amount applied to patient responsibility."
+    },
+
+    {
+      memberId: "M1004",
+      lastName: "brown",
+      dob: "1995-11-18",
+      dos: "2025-04-20",
+      claimNumber: "CLM9004",
+      providerName: "Sunrise Medical",
+      payerName: "Humana",
+      status: "Pending",
+      reason: "Claim is under medical review."
+    },
+
+    {
+      memberId: "M1005",
+      lastName: "davis",
+      dob: "1982-09-09",
+      dos: "2025-05-05",
+      claimNumber: "CLM9005",
+      providerName: "Metro Hospital",
+      payerName: "BlueCross",
+      status: "No Claim Found",
+      reason: "No matching claim available in the system."
+    }
+
+  ];
+
+
+  // CLAIM STATUS CHECK
+
+  function checkClaimStatus(){
+
+    const memberId = document.getElementById("memberId").value.trim();
+    const lastName = document.getElementById("lastName").value.trim().toLowerCase();
+    const dob = document.getElementById("dob").value;
+    const dos = document.getElementById("dos").value;
+    const claimNumber = document.getElementById("claimNumber").value.trim();
+    const providerName = document.getElementById("providerName").value.trim();
+    const payerName = document.getElementById("payerName").value.trim();
+
+    const resultDiv = document.getElementById("result");
+
+    const patient = patients.find(p =>
+
+      p.memberId === memberId &&
+      p.lastName === lastName &&
+      p.dob === dob &&
+      p.dos === dos &&
+      p.claimNumber === claimNumber &&
+      p.providerName.toLowerCase() === providerName.toLowerCase() &&
+      p.payerName.toLowerCase() === payerName.toLowerCase()
+
+    );
+
+    resultDiv.style.display = "block";
+
+    if(patient){
+
+      let className = "info";
+
+      if(patient.status === "Paid"){
+        className = "success";
+      }
+
+      else if(patient.status === "Denied"){
+        className = "danger";
+      }
+
+      else if(patient.status === "Partially Paid"){
+        className = "warning";
+      }
+
+      else if(patient.status === "Pending"){
+        className = "info";
+      }
+
+      else{
+        className = "danger";
+      }
+
+      resultDiv.className = `result ${className}`;
+
+      resultDiv.innerHTML = `
+
+        <h2>Claim Status: ${patient.status}</h2>
+
+        <br>
+
+        <p><strong>Member ID:</strong> ${patient.memberId}</p>
+
+        <p><strong>Claim Number:</strong> ${patient.claimNumber}</p>
+
+        <p><strong>Provider Name:</strong> ${patient.providerName}</p>
+
+        <p><strong>Payer Name:</strong> ${patient.payerName}</p>
+
+        <br>
+
+        <p><strong>Reason / Remarks:</strong> ${patient.reason}</p>
+
+      `;
+    }
+
+    else{
+
+      resultDiv.className = "result danger";
+
+      resultDiv.innerHTML = `
+
+        <h2>No Claim Found</h2>
+
+        <br>
+
+        <p>No matching patient claim details were found.</p>
+
+      `;
+    }
+
+  }
+
+</script>
+
+</body>
+</html>
