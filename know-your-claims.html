@@ -342,9 +342,8 @@
               <th>Member ID</th>
               <th>Provider NPI</th>
               <th>Payer</th>
-              <th>Current Status</th>
-              <th>Switch Status</th>
-              <th>Status Summary</th>
+              <th>Status</th>
+              <th>Summary</th>
             </tr>
           </thead>
           <tbody id="claimsBody"></tbody>
@@ -365,21 +364,14 @@
 
     const payerNames = ["Aetna", "Humana", "Wellpoint", "UHC", "UMR"];
     const providerNpis = ["12345", "67890", "01234", "06789"];
-    const statuses = ["Paid", "Denied", "Partially Paid", "Rejected"];
-
-    const summaries = {
-      Paid: "Claim successfully processed and reimbursed as per contracted benefits.",
-      Denied: "Claim denied due to missing documentation or coverage limitations.",
-      "Partially Paid": "Claim partially paid because certain services exceeded plan allowance.",
-      Rejected: "Claim rejected due to invalid or incomplete billing information."
-    };
+    
 
     const defaultClaims = Array.from({ length: 100 }, (_, index) => {
       const claimId = index + 1001;
       const patientLastName = patientLastNames[index % patientLastNames.length];
       const providerNpi = providerNpis[index % providerNpis.length];
       const payerName = payerNames[index % payerNames.length];
-      const status = statuses[index % statuses.length];
+      
 
       return {
         claimNumber: `CLM-${claimId}`,
@@ -387,8 +379,8 @@
         memberId: `M-${Math.floor(10000 + Math.random() * 89999)}`,
         providerNpi,
         payerName,
-        status,
-        summary: summaries[status]
+        status: "",
+        summary: ""
       };
     });
 
@@ -402,16 +394,14 @@
       localStorage.setItem("knowyourclaims-data", JSON.stringify(defaultClaims));
     }
 
-    const statusOptions = ["Paid", "Denied", "Partially Paid", "Rejected"];
+    
     let visibleClaims = [...claims];
 
     function normalize(value) {
       return String(value || "").trim().toLowerCase();
     }
 
-    function statusClass(status) {
-      return status.replace(/\s+/g, "");
-    }
+    
 
     function renderClaims(data) {
       const body = document.getElementById("claimsBody");
@@ -424,9 +414,7 @@
 
       data.forEach((claim) => {
         const row = document.createElement("tr");
-        const selectedOptions = statusOptions
-          .map((status) => `<option ${status === claim.status ? "selected" : ""}>${status}</option>`)
-          .join("");
+        
 
         row.innerHTML = `
           <td><span class="claim-number">${claim.claimNumber}</span></td>
@@ -434,14 +422,21 @@
           <td>${claim.memberId}</td>
           <td>${claim.providerNpi}</td>
           <td>${claim.payerName}</td>
-          <td><span class="status-pill ${statusClass(claim.status)}">${claim.status}</span></td>
           <td>
-            <select class="status-select" onchange="updateStatus('${claim.claimNumber}', this.value)">
-              ${selectedOptions}
-            </select>
+            <input
+              type="text"
+              class="status-select"
+              placeholder="Enter status"
+              value="${claim.status || ""}"
+              oninput="updateStatus('${claim.claimNumber}', this.value)"
+            />
           </td>
           <td>
-            <textarea class="summary-input" placeholder="Write summary for this status" oninput="updateSummary('${claim.claimNumber}', this.value)">${claim.summary}</textarea>
+            <textarea
+              class="summary-input"
+              placeholder="Write summary"
+              oninput="updateSummary('${claim.claimNumber}', this.value)"
+            >${claim.summary || ""}</textarea>
           </td>
         `;
 
@@ -488,7 +483,6 @@
       if (claim) {
         claim.status = status;
         saveClaims();
-        filterClaims();
       }
     }
 
