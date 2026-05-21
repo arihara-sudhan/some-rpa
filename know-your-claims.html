@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KnowYourClaims</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #697386;
+      --border: #dfe5ef;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --paid: #dcfce7;
+      --paid-text: #166534;
+      --denied: #fee2e2;
+      --denied-text: #991b1b;
+      --partial: #fef3c7;
+      --partial-text: #92400e;
+      --rejected: #ede9fe;
+      --rejected-text: #5b21b6;
+      --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 28px 36px 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    main {
+      padding: 14px 36px 42px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(223, 229, 239, 0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .filters {
+      padding: 22px;
+    }
+
+    .filters-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .filters-title h2,
+    .claims-title h2 {
+      margin: 0;
+      font-size: 1.12rem;
+      letter-spacing: -0.02em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: white;
+      color: var(--text);
+      font: inherit;
+      padding: 11px 12px;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: end;
+    }
+
+    button {
+      border: 0;
+      border-radius: 13px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .claims {
+      overflow: hidden;
+    }
+
+    .claims-title {
+      padding: 20px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-count {
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1100px;
+    }
+
+    th,
+    td {
+      padding: 16px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #fbfcff;
+    }
+
+    tr:hover td { background: #fbfdff; }
+
+    .claim-number {
+      font-weight: 850;
+      color: var(--primary-dark);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .Paid { background: var(--paid); color: var(--paid-text); }
+    .Denied { background: var(--denied); color: var(--denied-text); }
+    .PartiallyPaid { background: var(--partial); color: var(--partial-text); }
+    .Rejected { background: var(--rejected); color: var(--rejected-text); }
+
+    .status-select { min-width: 150px; }
+    .summary-input { min-width: 260px; }
+
+    .empty {
+      display: none;
+      padding: 34px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, minmax(160px, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      header, main { padding-left: 18px; padding-right: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      .filters-title, .claims-title { align-items: flex-start; flex-direction: column; }
+      .actions { align-items: stretch; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">KYC</div>
+      <div>
+        <h1>KnowYourClaims</h1>
+        <p class="subtitle">Search, review, and update claim status outcomes.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel filters">
+      <div class="filters-title">
+        <h2>Claim Search</h2>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="patientLastName">Patient Last Name</label>
+          <input id="patientLastName" type="text" placeholder="e.g. Johnson" />
+        </div>
+
+        <div>
+          <label for="memberId">Member ID</label>
+          <input id="memberId" type="text" placeholder="e.g. M-10245" />
+        </div>
+
+        <div>
+          <label for="claimNumber">Claim Number</label>
+          <input id="claimNumber" type="text" placeholder="e.g. CLM-1001" />
+        </div>
+
+        <div>
+          <label for="providerNpi">Provider NPI</label>
+          <select id="providerNpi">
+            <option value="">All NPIs</option>
+            <option>12345</option>
+            <option>67890</option>
+            <option>01234</option>
+            <option>06789</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="payerName">Payer Name</label>
+          <select id="payerName">
+            <option value="">All Payers</option>
+            <option>Aetna</option>
+            <option>Humana</option>
+            <option>Wellpoint</option>
+            <option>UHC</option>
+            <option>UMR</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" onclick="filterClaims()">Search</button>
+          <button class="btn-secondary" onclick="resetFilters()">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel claims">
+      <div class="claims-title">
+        <h2>Claims</h2>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim Number</th>
+              <th>Patient</th>
+              <th>Member ID</th>
+              <th>Provider NPI</th>
+              <th>Payer</th>
+              <th>Current Status</th>
+              <th>Switch Status</th>
+              <th>Status Summary</th>
+            </tr>
+          </thead>
+          <tbody id="claimsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="emptyState">
+        No claims found. Try changing your search filters.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const patientLastNames = [
+      "Johnson", "Patel", "Smith", "Garcia", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor",
+      "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Martinez", "Robinson", "Clark"
+    ];
+
+    const payerNames = ["Aetna", "Humana", "Wellpoint", "UHC", "UMR"];
+    const providerNpis = ["12345", "67890", "01234", "06789"];
+    const statuses = ["Paid", "Denied", "Partially Paid", "Rejected"];
+
+    const summaries = {
+      Paid: "Claim successfully processed and reimbursed as per contracted benefits.",
+      Denied: "Claim denied due to missing documentation or coverage limitations.",
+      "Partially Paid": "Claim partially paid because certain services exceeded plan allowance.",
+      Rejected: "Claim rejected due to invalid or incomplete billing information."
+    };
+
+    const defaultClaims = Array.from({ length: 100 }, (_, index) => {
+      const claimId = index + 1001;
+      const patientLastName = patientLastNames[index % patientLastNames.length];
+      const providerNpi = providerNpis[index % providerNpis.length];
+      const payerName = payerNames[index % payerNames.length];
+      const status = statuses[index % statuses.length];
+
+      return {
+        claimNumber: `CLM-${claimId}`,
+        patientLastName,
+        memberId: `M-${Math.floor(10000 + Math.random() * 89999)}`,
+        providerNpi,
+        payerName,
+        status,
+        summary: summaries[status]
+      };
+    });
+
+    const storedClaims = localStorage.getItem("knowyourclaims-data");
+
+    const claims = storedClaims
+      ? JSON.parse(storedClaims)
+      : defaultClaims;
+
+    if (!storedClaims) {
+      localStorage.setItem("knowyourclaims-data", JSON.stringify(defaultClaims));
+    }
+
+    const statusOptions = ["Paid", "Denied", "Partially Paid", "Rejected"];
+    let visibleClaims = [...claims];
+
+    function normalize(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function statusClass(status) {
+      return status.replace(/\s+/g, "");
+    }
+
+    function renderClaims(data) {
+      const body = document.getElementById("claimsBody");
+      const emptyState = document.getElementById("emptyState");
+      const resultCount = document.getElementById("resultCount");
+
+      body.innerHTML = "";
+      resultCount.textContent = `${data.length} claim${data.length === 1 ? "" : "s"} found`;
+      emptyState.style.display = data.length ? "none" : "block";
+
+      data.forEach((claim) => {
+        const row = document.createElement("tr");
+        const selectedOptions = statusOptions
+          .map((status) => `<option ${status === claim.status ? "selected" : ""}>${status}</option>`)
+          .join("");
+
+        row.innerHTML = `
+          <td><span class="claim-number">${claim.claimNumber}</span></td>
+          <td>${claim.patientLastName}</td>
+          <td>${claim.memberId}</td>
+          <td>${claim.providerNpi}</td>
+          <td>${claim.payerName}</td>
+          <td><span class="status-pill ${statusClass(claim.status)}">${claim.status}</span></td>
+          <td>
+            <select class="status-select" onchange="updateStatus('${claim.claimNumber}', this.value)">
+              ${selectedOptions}
+            </select>
+          </td>
+          <td>
+            <textarea class="summary-input" placeholder="Write summary for this status" oninput="updateSummary('${claim.claimNumber}', this.value)">${claim.summary}</textarea>
+          </td>
+        `;
+
+        body.appendChild(row);
+      });
+    }
+
+    function filterClaims() {
+      const patientLastName = normalize(document.getElementById("patientLastName").value);
+      const memberId = normalize(document.getElementById("memberId").value);
+      const claimNumber = normalize(document.getElementById("claimNumber").value);
+      const providerNpi = document.getElementById("providerNpi").value;
+      const payerName = document.getElementById("payerName").value;
+
+      visibleClaims = claims.filter((claim) => {
+        return (
+          (!patientLastName || normalize(claim.patientLastName).includes(patientLastName)) &&
+          (!memberId || normalize(claim.memberId).includes(memberId)) &&
+          (!claimNumber || normalize(claim.claimNumber).includes(claimNumber)) &&
+          (!providerNpi || claim.providerNpi === providerNpi) &&
+          (!payerName || claim.payerName === payerName)
+        );
+      });
+
+      renderClaims(visibleClaims);
+    }
+
+    function resetFilters() {
+      document.getElementById("patientLastName").value = "";
+      document.getElementById("memberId").value = "";
+      document.getElementById("claimNumber").value = "";
+      document.getElementById("providerNpi").value = "";
+      document.getElementById("payerName").value = "";
+      visibleClaims = [...claims];
+      renderClaims(visibleClaims);
+    }
+
+    function saveClaims() {
+      localStorage.setItem("knowyourclaims-data", JSON.stringify(claims));
+    }
+
+    function updateStatus(claimNumber, status) {
+      const claim = claims.find((item) => item.claimNumber === claimNumber);
+      if (claim) {
+        claim.status = status;
+        saveClaims();
+        filterClaims();
+      }
+    }
+    }
+
+    function updateSummary(claimNumber, summary) {
+      const claim = claims.find((item) => item.claimNumber === claimNumber);
+      if (claim) {
+        claim.summary = summary;
+        saveClaims();
+      }
+    }
+
+    window.addEventListener("beforeunload", saveClaims);
+
+    renderClaims(claims);
+  </script>
+</body>
+</html>
