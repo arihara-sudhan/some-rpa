@@ -323,7 +323,6 @@
         <div class="actions">
           <button class="btn-primary" onclick="filterClaims()">Search</button>
           <button class="btn-secondary" onclick="resetFilters()">Reset</button>
-          <button class="btn-secondary" onclick="exportToExcel()">Export Excel</button>
         </div>
       </div>
     </section>
@@ -356,8 +355,6 @@
       </div>
     </section>
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script>
     const patientLastNames = [
       "Johnson", "Patel", "Smith", "Garcia", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor",
@@ -368,17 +365,22 @@
     const providerNpis = ["12345", "67890", "01234", "06789"];
     
 
+    const fixedMemberIds = [
+      "M-70540", "M-17162", "M-64984", "M-52940", "M-39628", "M-89171", "M-75885", "M-19464", "M-36404", "M-12965",
+      "M-44480", "M-50231", "M-61842", "M-73519", "M-84620", "M-95731", "M-26842", "M-37953", "M-48064", "M-59175"
+    ];
+
     const defaultClaims = Array.from({ length: 100 }, (_, index) => {
       const claimId = index + 1001;
       const patientLastName = patientLastNames[index % patientLastNames.length];
       const providerNpi = providerNpis[index % providerNpis.length];
       const payerName = payerNames[index % payerNames.length];
-      
+      const memberId = fixedMemberIds[index % fixedMemberIds.length];
 
       return {
         claimNumber: `CLM-${claimId}`,
         patientLastName,
-        memberId: `M-${Math.floor(10000 + Math.random() * 89999)}`,
+        memberId,
         providerNpi,
         payerName,
         status: "",
@@ -486,25 +488,6 @@
         claim.summary = summary;
         saveClaims();
       }
-    }
-
-    function exportToExcel() {
-      const exportData = visibleClaims.map((claim) => ({
-        "Claim Number": claim.claimNumber,
-        "Patient Last Name": claim.patientLastName,
-        "Member ID": claim.memberId,
-        "Provider NPI": claim.providerNpi,
-        "Payer Name": claim.payerName,
-        "Status": claim.status || "",
-        "Summary": claim.summary || ""
-      }));
-
-      const worksheet = XLSX.utils.json_to_sheet(exportData);
-      const workbook = XLSX.utils.book_new();
-
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Claims");
-
-      XLSX.writeFile(workbook, "KnowYourClaims.xlsx");
     }
 
     renderClaims(claims);
