@@ -323,6 +323,7 @@
         <div class="actions">
           <button class="btn-primary" onclick="filterClaims()">Search</button>
           <button class="btn-secondary" onclick="resetFilters()">Reset</button>
+          <button class="btn-secondary" onclick="exportToExcel()">Export Excel</button>
         </div>
       </div>
     </section>
@@ -356,6 +357,7 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script>
     const patientLastNames = [
       "Johnson", "Patel", "Smith", "Garcia", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor",
@@ -384,15 +386,7 @@
       };
     });
 
-    const storedClaims = localStorage.getItem("knowyourclaims-data");
-
-    const claims = storedClaims
-      ? JSON.parse(storedClaims)
-      : defaultClaims;
-
-    if (!storedClaims) {
-      localStorage.setItem("knowyourclaims-data", JSON.stringify(defaultClaims));
-    }
+    const claims = defaultClaims;
 
     
     let visibleClaims = [...claims];
@@ -475,7 +469,7 @@
     }
 
     function saveClaims() {
-      localStorage.setItem("knowyourclaims-data", JSON.stringify(claims));
+      // Data is kept in the page only. No localStorage is used.
     }
 
     function updateStatus(claimNumber, status) {
@@ -494,7 +488,24 @@
       }
     }
 
-    window.addEventListener("beforeunload", saveClaims);
+    function exportToExcel() {
+      const exportData = visibleClaims.map((claim) => ({
+        "Claim Number": claim.claimNumber,
+        "Patient Last Name": claim.patientLastName,
+        "Member ID": claim.memberId,
+        "Provider NPI": claim.providerNpi,
+        "Payer Name": claim.payerName,
+        "Status": claim.status || "",
+        "Summary": claim.summary || ""
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Claims");
+
+      XLSX.writeFile(workbook, "KnowYourClaims.xlsx");
+    }
 
     renderClaims(claims);
   </script>
