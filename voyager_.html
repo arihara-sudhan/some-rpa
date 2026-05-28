@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voyager — Flight Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:    #1a1814;
+    --ink2:   #4a4740;
+    --ink3:   #8a8780;
+    --sand:   #f5f2ec;
+    --sand2:  #eae6dd;
+    --sand3:  #ddd8cc;
+    --accent: #c8560a;
+    --accent2:#e8752a;
+    --sky:    #1c3f6e;
+    --sky2:   #2a5fa0;
+    --white:  #ffffff;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(26,24,20,.08);
+    --shadow-lg: 0 8px 40px rgba(26,24,20,.14);
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  nav {
+    background: var(--sky);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--white); letter-spacing: .02em; }
+  .nav-logo span { color: var(--accent2); font-style: italic; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: rgba(255,255,255,.7); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-user { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.85); font-size: 13px; }
+  .nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #fff; }
+
+  .hero {
+    background: linear-gradient(160deg, var(--sky) 0%, var(--sky2) 60%, #1a4a7a 100%);
+    padding: 52px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,.04)'/%3E%3C/svg%3E") repeat;
+  }
+  .hero-title { font-family: 'Instrument Serif', serif; font-size: 42px; color: #fff; line-height: 1.15; margin-bottom: 6px; position: relative; }
+  .hero-title em { font-style: italic; color: var(--accent2); }
+  .hero-sub { color: rgba(255,255,255,.65); font-size: 15px; margin-bottom: 36px; position: relative; }
+
+  .search-card { background: var(--white); border-radius: 16px; padding: 28px 32px; box-shadow: var(--shadow-lg); max-width: 860px; position: relative; }
+  .trip-tabs { display: flex; gap: 4px; margin-bottom: 24px; }
+  .trip-tab { padding: 7px 18px; border-radius: 20px; border: 1.5px solid var(--sand3); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--ink2); transition: all .15s; }
+  .trip-tab.active { background: var(--sky); border-color: var(--sky); color: #fff; font-weight: 500; }
+  .trip-tab:not(.active):hover { border-color: var(--sky2); color: var(--sky); }
+
+  .search-row { display: grid; grid-template-columns: 1fr 1fr 160px 160px; gap: 12px; margin-bottom: 16px; }
+  .search-row-2 { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); }
+  .field-input { height: 46px; border: 1.5px solid var(--sand3); border-radius: 8px; padding: 0 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--ink); background: var(--sand); transition: border-color .15s, background .15s; outline: none; }
+  .field-input:focus { border-color: var(--sky2); background: var(--white); }
+  .field-input::placeholder { color: var(--ink3); font-size: 14px; }
+  select.field-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8780' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+
+  /* ── DRIFT: search button now uses class + aria-label, no id ── */
+  .btn-search { height: 46px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; padding: 0 28px; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
+  .btn-search:hover { background: var(--accent2); }
+  .btn-search:active { transform: scale(.98); }
+
+  .main { max-width: 1100px; margin: 0 auto; padding: 48px 40px; }
+
+  .steps { display: flex; align-items: center; gap: 0; margin-bottom: 40px; }
+  .step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink3); font-weight: 400; }
+  .step.active { color: var(--sky); font-weight: 500; }
+  .step.done { color: var(--accent); }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .step.done .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step.active .step-num { background: var(--sky); border-color: var(--sky); color: #fff; }
+  .step-divider { flex: 1; height: 1px; background: var(--sand3); margin: 0 12px; min-width: 40px; max-width: 80px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .results-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+  .results-title { font-family: 'Instrument Serif', serif; font-size: 26px; }
+  .results-sub { font-size: 13px; color: var(--ink3); margin-top: 3px; }
+  .sort-bar { display: flex; align-items: center; gap: 8px; }
+  .sort-label { font-size: 13px; color: var(--ink3); }
+  select.sort-select { border: 1.5px solid var(--sand3); border-radius: 6px; padding: 6px 28px 6px 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--white); color: var(--ink); cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8780' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+
+  .flight-list { display: flex; flex-direction: column; gap: 14px; }
+  .flight-card { background: var(--white); border: 1.5px solid var(--sand3); border-radius: var(--radius); padding: 22px 28px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  .flight-card:hover { border-color: var(--sky2); box-shadow: var(--shadow); }
+  .flight-card.selected { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(28,63,110,.1); }
+  .flight-main { display: flex; align-items: center; gap: 32px; }
+  .airline-logo { width: 40px; height: 40px; border-radius: 8px; background: var(--sand); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--ink2); text-align: center; line-height: 1.2; flex-shrink: 0; }
+  .flight-times { display: flex; align-items: center; gap: 20px; }
+  .time-block { text-align: center; }
+  .time-big { font-size: 22px; font-weight: 500; line-height: 1; }
+  .time-airport { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+  .flight-route { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 100px; }
+  .route-line { display: flex; align-items: center; gap: 6px; width: 100%; }
+  .route-dash { flex: 1; height: 1px; background: var(--sand3); }
+  .route-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
+  .route-plane { font-size: 12px; color: var(--ink3); }
+  .route-duration { font-size: 11px; color: var(--ink3); }
+  .route-stops { font-size: 11px; color: var(--accent); font-weight: 500; }
+  .flight-tags { display: flex; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 400; }
+  .tag-green { background: #edf7ed; color: #2a7a2a; }
+  .tag-blue  { background: #e8f0f9; color: var(--sky); }
+  .tag-gray  { background: var(--sand); color: var(--ink3); }
+  .flight-price { text-align: right; }
+  .price-amount { font-size: 28px; font-weight: 500; line-height: 1; }
+  .price-label  { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+  .btn-select { margin-top: 10px; padding: 8px 20px; background: var(--sky); color: #fff; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; }
+  .btn-select:hover { background: var(--sky2); }
+
+  .seats-layout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; }
+  .seat-map-wrap { background: var(--white); border-radius: var(--radius); padding: 28px; border: 1.5px solid var(--sand3); }
+  .seat-map-title { font-family: 'Instrument Serif', serif; font-size: 20px; margin-bottom: 6px; }
+  .seat-map-sub { font-size: 13px; color: var(--ink3); margin-bottom: 24px; }
+  .seat-legend { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink2); }
+  .legend-dot { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+  .plane-nose { width: 80px; height: 30px; margin: 0 auto 8px; background: var(--sand2); border-radius: 40px 40px 0 0; border: 1.5px solid var(--sand3); }
+  .cabin-section { margin-bottom: 20px; }
+  .cabin-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); text-align: center; margin-bottom: 10px; }
+  .seat-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px; }
+  .row-num { width: 22px; font-size: 11px; color: var(--ink3); text-align: right; flex-shrink: 0; }
+  .aisle { width: 20px; }
+
+  /* ── DRIFT: seats use data-seat instead of id ── */
+  .seat-cell { width: 34px; height: 34px; border-radius: 6px 6px 3px 3px; border: 1.5px solid; cursor: pointer; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; transition: all .12s; flex-shrink: 0; }
+  .seat-cell.available { background: var(--white); border-color: var(--sand3); color: var(--ink3); }
+  .seat-cell.available:hover { background: #e8f0f9; border-color: var(--sky2); color: var(--sky); }
+  .seat-cell.taken { background: var(--sand2); border-color: var(--sand3); color: var(--sand3); cursor: not-allowed; }
+  .seat-cell.selected { background: var(--sky); border-color: var(--sky); color: #fff; }
+  .seat-cell.business { background: #fdf3e8; border-color: #e8c88a; color: #a06010; }
+  .seat-cell.business:hover { background: #f5e4c0; border-color: #c8a040; }
+  .seat-cell.business.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .booking-summary { background: var(--white); border: 1.5px solid var(--sand3); border-radius: var(--radius); padding: 24px; position: sticky; top: 80px; }
+  .summary-title { font-family: 'Instrument Serif', serif; font-size: 18px; margin-bottom: 18px; }
+  .summary-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink2); padding: 8px 0; border-bottom: 1px solid var(--sand2); }
+  .summary-line:last-of-type { border-bottom: none; }
+  .summary-line .label { color: var(--ink3); }
+  .summary-line .value { font-weight: 500; color: var(--ink); }
+  .summary-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 500; padding: 14px 0 0; border-top: 1.5px solid var(--sand3); margin-top: 6px; }
+  .btn-continue { width: 100%; margin-top: 20px; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background .15s; }
+  .btn-continue:hover { background: var(--accent2); }
+  .btn-continue:disabled { background: var(--sand3); color: var(--ink3); cursor: not-allowed; }
+  .seat-note { font-size: 12px; color: var(--ink3); margin-top: 10px; text-align: center; }
+
+  .checkout-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; }
+  .checkout-form { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--sand3); padding: 32px; }
+  .form-section { margin-bottom: 32px; }
+  .form-section-title { font-family: 'Instrument Serif', serif; font-size: 18px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--sand2); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .checkout-field { display: flex; flex-direction: column; gap: 5px; }
+  .checkout-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--ink3); }
+  .checkout-input { height: 44px; border: 1.5px solid var(--sand3); border-radius: 7px; padding: 0 13px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); background: var(--sand); outline: none; transition: border-color .15s, background .15s; }
+  .checkout-input:focus { border-color: var(--sky2); background: var(--white); }
+  .checkout-input::placeholder { color: var(--ink3); }
+  .card-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  .checkout-checkbox { width: 16px; height: 16px; accent-color: var(--sky); cursor: pointer; }
+  .checkbox-label { font-size: 13px; color: var(--ink2); cursor: pointer; }
+
+  /* ── DRIFT: pay button uses aria-label, no id ── */
+  .btn-pay { width: 100%; padding: 14px; background: var(--sky); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 24px; transition: background .15s, transform .1s; }
+  .btn-pay:hover { background: var(--sky2); }
+  .btn-pay:active { transform: scale(.99); }
+  .secure-note { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink3); margin-top: 10px; justify-content: center; }
+
+  .confirm-wrap { text-align: center; max-width: 560px; margin: 0 auto; padding: 60px 0; }
+  .confirm-icon { width: 72px; height: 72px; border-radius: 50%; background: #edf7ed; border: 2px solid #2a7a2a; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; }
+  .confirm-title { font-family: 'Instrument Serif', serif; font-size: 36px; margin-bottom: 10px; }
+  .confirm-sub { font-size: 15px; color: var(--ink2); margin-bottom: 32px; line-height: 1.6; }
+  .booking-ref { background: var(--white); border: 1.5px solid var(--sand3); border-radius: var(--radius); padding: 20px 28px; margin-bottom: 28px; text-align: left; }
+  .ref-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); margin-bottom: 4px; }
+  .ref-code { font-size: 28px; font-weight: 500; color: var(--sky); letter-spacing: .06em; }
+  .btn-home { padding: 12px 32px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; }
+
+  /* ═══════════════════════════════════════════
+     MODAL OVERLAY — shared by all 3 interruptions
+  ═══════════════════════════════════════════ */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(26,24,20,.55);
+    z-index: 900;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(2px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s;
+  }
+  .modal-backdrop.visible {
+    opacity: 1; pointer-events: all;
+  }
+  .modal-box {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 32px 36px;
+    max-width: 460px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .modal-icon { font-size: 32px; margin-bottom: 12px; }
+  .modal-title { font-family: 'Instrument Serif', serif; font-size: 22px; margin-bottom: 8px; color: var(--ink); }
+  .modal-body { font-size: 14px; color: var(--ink2); line-height: 1.6; margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-btn-primary {
+    padding: 10px 22px; background: var(--sky); color: #fff;
+    border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: background .15s;
+  }
+  .modal-btn-primary:hover { background: var(--sky2); }
+  .modal-btn-secondary {
+    padding: 10px 22px; background: transparent; color: var(--ink2);
+    border: 1.5px solid var(--sand3); border-radius: 7px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; cursor: pointer; transition: border-color .15s;
+  }
+  .modal-btn-secondary:hover { border-color: var(--ink3); }
+
+  /* cookie bar variant — bottom strip */
+  .cookie-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--ink);
+    color: rgba(255,255,255,.9);
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    z-index: 900;
+    transform: translateY(100%);
+    transition: transform .3s ease;
+  }
+  .cookie-bar.visible { transform: translateY(0); }
+  .cookie-bar-text { font-size: 13px; line-height: 1.5; }
+  .cookie-bar-text a { color: var(--accent2); text-decoration: underline; cursor: pointer; }
+  .cookie-bar-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .cookie-btn-accept {
+    padding: 8px 20px; background: var(--accent); color: #fff;
+    border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  }
+  .cookie-btn-decline {
+    padding: 8px 16px; background: transparent; color: rgba(255,255,255,.6);
+    border: 1px solid rgba(255,255,255,.2); border-radius: 6px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .search-row, .search-row-2 { grid-template-columns: 1fr 1fr; }
+    .seats-layout, .checkout-layout { grid-template-columns: 1fr; }
+    .hero { padding: 32px 20px 60px; }
+    .main { padding: 32px 20px; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .cookie-bar { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     INTERRUPTION 1: Cookie consent bar (page load)
+     Selector to dismiss: button[aria-label="Accept cookies"]
+══════════════════════════════════════════════ -->
+<div class="cookie-bar" id="cookie-bar" role="dialog" aria-label="Cookie consent" aria-modal="true">
+  <div class="cookie-bar-text">
+    We use cookies to improve your experience and show personalised offers. See our <a>privacy policy</a>.
+  </div>
+  <div class="cookie-bar-actions">
+    <button class="cookie-btn-decline" aria-label="Decline cookies" onclick="dismissCookieBar()">Decline</button>
+    <button class="cookie-btn-accept" aria-label="Accept cookies" onclick="dismissCookieBar()">Accept all</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     INTERRUPTION 2: Business class upsell modal
+     (fires after flight selection)
+     Dismiss selector: button[aria-label="Dismiss upgrade offer"]
+══════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="upsell-modal" role="dialog" aria-modal="true" aria-label="Upgrade offer">
+  <div class="modal-box">
+    <div class="modal-icon">✈️</div>
+    <div class="modal-title">Upgrade to Business Class?</div>
+    <div class="modal-body">
+      Enjoy lie-flat seats, premium dining, and priority boarding on your New York → London flight.
+      Upgrade from <strong>$489</strong> to <strong>$1,240</strong> per person — a difference of just <strong>$751</strong>.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-secondary" aria-label="Dismiss upgrade offer" onclick="dismissUpsell()">No thanks</button>
+      <button class="modal-btn-primary" aria-label="Accept upgrade offer" onclick="dismissUpsell()">Upgrade me</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     INTERRUPTION 3: Session expiry warning modal
+     (fires ~4s after checkout page loads)
+     Dismiss selector: button[aria-label="Keep session alive"]
+══════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="session-modal" role="dialog" aria-modal="true" aria-label="Session expiry warning">
+  <div class="modal-box">
+    <div class="modal-icon">⏱</div>
+    <div class="modal-title">Your session is expiring</div>
+    <div class="modal-body">
+      For your security, your session will expire in <strong id="session-countdown">5:00</strong> minutes due to inactivity.
+      Would you like to stay logged in?
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-secondary" aria-label="Log out now" onclick="dismissSession()">Log out</button>
+      <button class="modal-btn-primary" aria-label="Keep session alive" onclick="dismissSession()">Keep me logged in</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Voy<span>ager</span></div>
+  <div class="nav-links">
+    <a href="#">Flights</a>
+    <a href="#">Hotels</a>
+    <a href="#">Packages</a>
+    <a href="#">Deals</a>
+  </div>
+  <div class="nav-user">
+    <div class="nav-avatar">JD</div>
+    <span>John Doe</span>
+  </div>
+</nav>
+
+<!-- HERO + SEARCH -->
+<div class="hero">
+  <div class="hero-title">Find your next <em>journey</em></div>
+  <div class="hero-sub">Search hundreds of airlines. No hidden fees.</div>
+
+  <div class="search-card">
+    <div class="trip-tabs">
+      <!-- ── DRIFT: tabs have no id, use data-tab only ── -->
+      <button class="trip-tab active" data-tab="roundtrip">Round trip</button>
+      <button class="trip-tab" data-tab="oneway">One way</button>
+      <button class="trip-tab" data-tab="multicity">Multi-city</button>
+    </div>
+
+    <div class="search-row">
+      <div class="field-group">
+        <label class="field-label">From</label>
+        <!-- ── DRIFT: id="origin" gone → name + aria-label ── -->
+        <input class="field-input" name="origin" aria-label="Departure city or airport" type="text" placeholder="City or airport" value="New York (JFK)">
+      </div>
+      <div class="field-group">
+        <label class="field-label">To</label>
+        <!-- ── DRIFT: id="destination" gone → name + aria-label ── -->
+        <input class="field-input" name="destination" aria-label="Arrival city or airport" type="text" placeholder="City or airport" value="London (LHR)">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Depart</label>
+        <!-- ── DRIFT: id="depart-date" gone → name only ── -->
+        <input class="field-input" name="depart-date" type="date" value="2026-07-15">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Return</label>
+        <input class="field-input" name="return-date" type="date" value="2026-07-28">
+      </div>
+    </div>
+
+    <div class="search-row-2">
+      <div class="field-group">
+        <label class="field-label">Passengers</label>
+        <select class="field-input" name="passengers" aria-label="Number of passengers">
+          <option value="1">1 Adult</option>
+          <option value="2" selected>2 Adults</option>
+          <option value="3">3 Adults</option>
+          <option value="4">4 Adults</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Cabin</label>
+        <select class="field-input" name="cabin-class" aria-label="Cabin class">
+          <option value="economy" selected>Economy</option>
+          <option value="premium">Premium Economy</option>
+          <option value="business">Business</option>
+          <option value="first">First Class</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Flexibility</label>
+        <select class="field-input" name="flexible" aria-label="Date flexibility">
+          <option value="exact" selected>Exact dates</option>
+          <option value="pm3">± 3 days</option>
+          <option value="pm7">± 7 days</option>
+        </select>
+      </div>
+      <!-- ── DRIFT: id="btn-search" gone → aria-label only ── -->
+      <button class="btn-search" aria-label="Search available flights" onclick="goToResults()">Search flights</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="steps">
+    <div class="step active" data-step="1"><div class="step-num">1</div><span>Choose flight</span></div>
+    <div class="step-divider"></div>
+    <div class="step" data-step="2"><div class="step-num">2</div><span>Select seat</span></div>
+    <div class="step-divider"></div>
+    <div class="step" data-step="3"><div class="step-num">3</div><span>Passenger details</span></div>
+    <div class="step-divider"></div>
+    <div class="step" data-step="4"><div class="step-num">4</div><span>Confirm &amp; pay</span></div>
+  </div>
+
+  <!-- PAGE 1: RESULTS -->
+  <div class="page active" id="page-results">
+    <div class="results-header">
+      <div>
+        <div class="results-title">New York → London</div>
+        <div class="results-sub">15 Jul · 2 adults · Economy · 12 results found</div>
+      </div>
+      <div class="sort-bar">
+        <span class="sort-label">Sort by</span>
+        <select class="sort-select" name="sort-by" aria-label="Sort results">
+          <option value="best" selected>Best</option>
+          <option value="cheapest">Cheapest</option>
+          <option value="fastest">Fastest</option>
+          <option value="departure">Departure</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flight-list">
+
+      <!-- ── DRIFT: flight cards keep data-flight-id but lose id attr ── -->
+      <div class="flight-card" data-flight-id="VA401" data-price="548" aria-label="Virgin Atlantic flight VA401" onclick="selectFlight(this)">
+        <div>
+          <div class="flight-main">
+            <div class="airline-logo">Virgin<br>Atlantic</div>
+            <div class="flight-times">
+              <div class="time-block"><div class="time-big">08:15</div><div class="time-airport">JFK</div></div>
+              <div class="flight-route">
+                <div class="route-line"><div class="route-dot"></div><div class="route-dash"></div><div class="route-plane">✈</div><div class="route-dash"></div><div class="route-dot"></div></div>
+                <div class="route-duration">7h 25m</div><div class="route-stops">Non-stop</div>
+              </div>
+              <div class="time-block"><div class="time-big">20:40</div><div class="time-airport">LHR</div></div>
+            </div>
+          </div>
+          <div class="flight-tags">
+            <span class="tag tag-green">Best value</span>
+            <span class="tag tag-blue">On time 94%</span>
+            <span class="tag tag-gray">VS 401</span>
+          </div>
+        </div>
+        <div class="flight-price">
+          <div class="price-amount">$548</div>
+          <div class="price-label">per person</div>
+          <button class="btn-select" aria-label="Select Virgin Atlantic VA401">Select</button>
+        </div>
+      </div>
+
+      <div class="flight-card" data-flight-id="BA178" data-price="612" aria-label="British Airways flight BA178" onclick="selectFlight(this)">
+        <div>
+          <div class="flight-main">
+            <div class="airline-logo">British<br>Airways</div>
+            <div class="flight-times">
+              <div class="time-block"><div class="time-big">10:30</div><div class="time-airport">JFK</div></div>
+              <div class="flight-route">
+                <div class="route-line"><div class="route-dot"></div><div class="route-dash"></div><div class="route-plane">✈</div><div class="route-dash"></div><div class="route-dot"></div></div>
+                <div class="route-duration">7h 10m</div><div class="route-stops">Non-stop</div>
+              </div>
+              <div class="time-block"><div class="time-big">22:40</div><div class="time-airport">LHR</div></div>
+            </div>
+          </div>
+          <div class="flight-tags">
+            <span class="tag tag-blue">On time 91%</span>
+            <span class="tag tag-gray">BA 178</span>
+          </div>
+        </div>
+        <div class="flight-price">
+          <div class="price-amount">$612</div>
+          <div class="price-label">per person</div>
+          <button class="btn-select" aria-label="Select British Airways BA178">Select</button>
+        </div>
+      </div>
+
+      <!-- ── DRIFT: flight-card-3 id gone → aria-label="American Airlines flight AA100" ── -->
+      <div class="flight-card" data-flight-id="AA100" data-price="489" aria-label="American Airlines flight AA100" onclick="selectFlight(this)">
+        <div>
+          <div class="flight-main">
+            <div class="airline-logo">American<br>Airlines</div>
+            <div class="flight-times">
+              <div class="time-block"><div class="time-big">22:15</div><div class="time-airport">JFK</div></div>
+              <div class="flight-route">
+                <div class="route-line"><div class="route-dot"></div><div class="route-dash"></div><div class="route-plane">✈</div><div class="route-dash"></div><div class="route-dot"></div></div>
+                <div class="route-duration">9h 55m</div>
+                <div class="route-stops" style="color:var(--ink3)">1 stop · MAN</div>
+              </div>
+              <div class="time-block"><div class="time-big">12:10+1</div><div class="time-airport">LHR</div></div>
+            </div>
+          </div>
+          <div class="flight-tags">
+            <span class="tag tag-gray">AA 100</span>
+            <span class="tag tag-gray">1h 20m layover</span>
+          </div>
+        </div>
+        <div class="flight-price">
+          <div class="price-amount">$489</div>
+          <div class="price-label">per person</div>
+          <button class="btn-select" aria-label="Select American Airlines AA100">Select</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PAGE 2: SEAT MAP -->
+  <div class="page" id="page-seats">
+    <div class="seats-layout">
+      <div class="seat-map-wrap">
+        <div class="seat-map-title">Choose your seat</div>
+        <div class="seat-map-sub" id="seat-map-sub">American Airlines AA 100 · New York → London</div>
+        <div class="seat-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#fff;border:1.5px solid var(--sand3)"></div> Available</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--sand2);border:1.5px solid var(--sand3)"></div> Taken</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--sky);border:1.5px solid var(--sky)"></div> Selected</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#fdf3e8;border:1.5px solid #e8c88a"></div> Business</div>
+        </div>
+        <div class="plane-nose"></div>
+        <div class="cabin-section">
+          <div class="cabin-label">Business class</div>
+          <div id="business-rows"></div>
+        </div>
+        <div class="cabin-section">
+          <div class="cabin-label">Economy class</div>
+          <div id="economy-rows"></div>
+        </div>
+      </div>
+
+      <div class="booking-summary">
+        <div class="summary-title">Booking summary</div>
+        <div class="summary-line"><span class="label">Flight</span><span class="value" id="sum-flight">AA 100</span></div>
+        <div class="summary-line"><span class="label">Route</span><span class="value">JFK → LHR</span></div>
+        <div class="summary-line"><span class="label">Date</span><span class="value">15 Jul 2026</span></div>
+        <div class="summary-line"><span class="label">Passengers</span><span class="value">2 adults</span></div>
+        <div class="summary-line"><span class="label">Seat</span><span class="value" id="sum-seat">Not selected</span></div>
+        <div class="summary-line"><span class="label">Base fare</span><span class="value" id="sum-base">$489 × 2</span></div>
+        <div class="summary-line"><span class="label">Taxes &amp; fees</span><span class="value">$184</span></div>
+        <div class="summary-total"><span>Total</span><span id="sum-total">$1,162</span></div>
+        <!-- ── DRIFT: id="btn-continue-seats" gone → aria-label ── -->
+        <button class="btn-continue" aria-label="Continue to checkout" disabled onclick="goToCheckout()">Continue to checkout</button>
+        <div class="seat-note" id="seat-note">Please select a seat to continue</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: CHECKOUT -->
+  <div class="page" id="page-checkout">
+    <div class="checkout-layout">
+      <div class="checkout-form">
+
+        <div class="form-section">
+          <div class="form-section-title">Passenger 1</div>
+          <div class="form-grid">
+            <div class="checkout-field">
+              <label class="checkout-label">First name</label>
+              <!-- ── DRIFT: all checkout inputs lose id → name + aria-label ── -->
+              <input class="checkout-input" name="p1-first-name" aria-label="Passenger 1 first name" type="text" placeholder="John">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Last name</label>
+              <input class="checkout-input" name="p1-last-name" aria-label="Passenger 1 last name" type="text" placeholder="Doe">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Date of birth</label>
+              <input class="checkout-input" name="p1-dob" aria-label="Passenger 1 date of birth" type="date">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Passport number</label>
+              <input class="checkout-input" name="p1-passport" aria-label="Passenger 1 passport number" type="text" placeholder="AB1234567">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Nationality</label>
+              <select class="checkout-input" name="p1-nationality" aria-label="Passenger 1 nationality">
+                <option value="">Select country</option>
+                <option value="US" selected>United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="IN">India</option>
+                <option value="DE">Germany</option>
+              </select>
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Email address</label>
+              <input class="checkout-input" name="p1-email" aria-label="Passenger 1 email address" type="email" placeholder="john@example.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Passenger 2</div>
+          <div class="form-grid">
+            <div class="checkout-field">
+              <label class="checkout-label">First name</label>
+              <input class="checkout-input" name="p2-first-name" aria-label="Passenger 2 first name" type="text" placeholder="Jane">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Last name</label>
+              <input class="checkout-input" name="p2-last-name" aria-label="Passenger 2 last name" type="text" placeholder="Doe">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Date of birth</label>
+              <input class="checkout-input" name="p2-dob" aria-label="Passenger 2 date of birth" type="date">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Passport number</label>
+              <input class="checkout-input" name="p2-passport" aria-label="Passenger 2 passport number" type="text" placeholder="CD9876543">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Nationality</label>
+              <select class="checkout-input" name="p2-nationality" aria-label="Passenger 2 nationality">
+                <option value="">Select country</option>
+                <option value="US" selected>United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="IN">India</option>
+                <option value="DE">Germany</option>
+              </select>
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Email address</label>
+              <input class="checkout-input" name="p2-email" aria-label="Passenger 2 email address" type="email" placeholder="jane@example.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Payment details</div>
+          <div class="form-grid full">
+            <div class="checkout-field">
+              <label class="checkout-label">Name on card</label>
+              <input class="checkout-input" name="card-name" aria-label="Name on card" type="text" placeholder="John Doe">
+            </div>
+          </div>
+          <div class="card-row" style="margin-top:14px">
+            <div class="checkout-field">
+              <label class="checkout-label">Card number</label>
+              <input class="checkout-input" name="card-number" aria-label="Credit card number" type="text" placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">Expiry</label>
+              <input class="checkout-input" name="card-expiry" aria-label="Card expiry date" type="text" placeholder="MM/YY" maxlength="5">
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label">CVV</label>
+              <input class="checkout-input" name="card-cvv" aria-label="Card CVV security code" type="text" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          <div class="checkbox-row" style="margin-top:18px">
+            <input type="checkbox" class="checkout-checkbox" name="save-card" aria-label="Save card for future bookings">
+            <label class="checkbox-label">Save card for future bookings</label>
+          </div>
+          <div class="checkbox-row">
+            <!-- ── DRIFT: id="agree-terms" gone → name + aria-label ── -->
+            <input type="checkbox" class="checkout-checkbox" name="agree-terms" aria-label="I agree to the terms and conditions">
+            <label class="checkbox-label">I agree to the terms and conditions</label>
+          </div>
+        </div>
+
+        <!-- ── DRIFT: id="btn-pay" gone → aria-label ── -->
+        <button class="btn-pay" aria-label="Pay and confirm booking" onclick="goToConfirmation()">Pay $1,162 and confirm</button>
+        <div class="secure-note">🔒 Secured with 256-bit SSL encryption</div>
+      </div>
+
+      <div class="booking-summary">
+        <div class="summary-title">Order summary</div>
+        <div class="summary-line"><span class="label">Flight</span><span class="value" id="co-sum-flight">AA 100</span></div>
+        <div class="summary-line"><span class="label">Route</span><span class="value">JFK → LHR</span></div>
+        <div class="summary-line"><span class="label">Date</span><span class="value">15 Jul 2026</span></div>
+        <div class="summary-line"><span class="label">Seat</span><span class="value" id="co-sum-seat">—</span></div>
+        <div class="summary-line"><span class="label">Passengers</span><span class="value">2 adults</span></div>
+        <div class="summary-line"><span class="label">Base fare</span><span class="value">$978</span></div>
+        <div class="summary-line"><span class="label">Seat fee</span><span class="value">$40</span></div>
+        <div class="summary-line"><span class="label">Taxes &amp; fees</span><span class="value">$144</span></div>
+        <div class="summary-total"><span>Total</span><span>$1,162</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: CONFIRMATION -->
+  <div class="page" id="page-confirmation">
+    <div class="confirm-wrap">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">Booking confirmed!</div>
+      <div class="confirm-sub">
+        Your tickets have been sent to <strong id="conf-email">john@example.com</strong>.<br>
+        Check in opens 24 hours before departure.
+      </div>
+      <div class="booking-ref">
+        <div class="ref-label">Booking reference</div>
+        <!-- ── kept id here: it's the final assertion target, intentionally stable ── -->
+        <div class="ref-code" id="booking-ref-code">VOY-000000</div>
+      </div>
+      <div class="summary-line" style="margin-bottom:8px"><span class="label">Flight</span><span class="value" id="conf-flight">AA 100</span></div>
+      <div class="summary-line" style="margin-bottom:8px"><span class="label">Seat</span><span class="value" id="conf-seat">—</span></div>
+      <div class="summary-line" style="margin-bottom:28px"><span class="label">Total paid</span><span class="value">$1,162</span></div>
+      <button class="btn-home" onclick="resetApp()">Book another flight</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ─── STATE ──────────────────────────────────────────
+let selectedFlightId    = null;
+let selectedFlightPrice = 489;
+let selectedSeat        = null;
+let sessionTimer        = null;
+let countdownInterval   = null;
+
+// ─── INTERRUPTION 1: Cookie bar fires on load ────────
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.getElementById('cookie-bar').classList.add('visible');
+  }, 800);
+});
+
+function dismissCookieBar() {
+  document.getElementById('cookie-bar').classList.remove('visible');
+}
+
+// ─── INTERRUPTION 2: Upsell fires after flight pick ──
+function showUpsell() {
+  document.getElementById('upsell-modal').classList.add('visible');
+}
+
+function dismissUpsell() {
+  document.getElementById('upsell-modal').classList.remove('visible');
+  setStep(2);
+}
+
+// ─── INTERRUPTION 3: Session warning on checkout ─────
+function startSessionWarning() {
+  clearTimeout(sessionTimer);
+  sessionTimer = setTimeout(() => {
+    let secs = 300;
+    document.getElementById('session-countdown').textContent = '5:00';
+    document.getElementById('session-modal').classList.add('visible');
+    countdownInterval = setInterval(() => {
+      secs--;
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      document.getElementById('session-countdown').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+      if (secs <= 0) clearInterval(countdownInterval);
+    }, 1000);
+  }, 4000);
+}
+
+function dismissSession() {
+  clearInterval(countdownInterval);
+  document.getElementById('session-modal').classList.remove('visible');
+}
+
+// ─── STEP MANAGEMENT ─────────────────────────────────
+function setStep(n) {
+  document.querySelectorAll('.step').forEach((el, i) => {
+    el.classList.remove('active', 'done');
+    if (i + 1 < n)  el.classList.add('done');
+    if (i + 1 === n) el.classList.add('active');
+  });
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pages = ['page-results','page-seats','page-checkout','page-confirmation'];
+  document.getElementById(pages[n - 1]).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 3) startSessionWarning();
+}
+
+function goToResults() { setStep(1); }
+
+// ─── SELECT FLIGHT → trigger upsell before seat map ──
+function selectFlight(card) {
+  document.querySelectorAll('.flight-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedFlightId    = card.dataset.flightId;
+  selectedFlightPrice = parseInt(card.dataset.price, 10);
+
+  const airlineMap = { VA401: 'VS 401 · Virgin Atlantic', BA178: 'BA 178 · British Airways', AA100: 'AA 100 · American Airlines' };
+  document.getElementById('sum-flight').textContent  = airlineMap[selectedFlightId] || selectedFlightId;
+  document.getElementById('sum-base').textContent    = `$${selectedFlightPrice} × 2`;
+  document.getElementById('co-sum-flight').textContent = airlineMap[selectedFlightId] || selectedFlightId;
+  document.getElementById('conf-flight').textContent = airlineMap[selectedFlightId] || selectedFlightId;
+
+  // Show upsell interruption — seat map only shows after dismissal
+  setTimeout(() => showUpsell(), 300);
+}
+
+// ─── SEAT MAP ─────────────────────────────────────────
+const TAKEN_BUSINESS = ['1A','1C','2B','2D','3A'];
+const TAKEN_ECONOMY  = ['10A','10B','11C','12D','12F','14A','14B','15E','16C','18A','20B','20C','22E','24F','25A'];
+
+function buildSeatMap() {
+  const bRows = document.getElementById('business-rows');
+  const eRows = document.getElementById('economy-rows');
+  bRows.innerHTML = '';
+  eRows.innerHTML = '';
+
+  for (let r = 1; r <= 4; r++) {
+    const row = document.createElement('div');
+    row.className = 'seat-row';
+    row.innerHTML = `<div class="row-num">${r}</div>`;
+    ['A','B'].forEach(s => row.appendChild(makeSeat(r, s, 'business')));
+    row.innerHTML += '<div class="aisle"></div>';
+    ['C','D'].forEach(s => row.appendChild(makeSeat(r, s, 'business')));
+    bRows.appendChild(row);
+  }
+
+  for (let r = 10; r <= 26; r++) {
+    const row = document.createElement('div');
+    row.className = 'seat-row';
+    row.innerHTML = `<div class="row-num">${r}</div>`;
+    ['A','B','C'].forEach(s => row.appendChild(makeSeat(r, s, 'economy')));
+    row.innerHTML += '<div class="aisle"></div>';
+    ['D','E','F'].forEach(s => row.appendChild(makeSeat(r, s, 'economy')));
+    eRows.appendChild(row);
+  }
+}
+
+function makeSeat(row, col, type) {
+  const seatId  = `${row}${col}`;
+  const isTaken = (type === 'business' ? TAKEN_BUSINESS : TAKEN_ECONOMY).includes(seatId);
+  const el      = document.createElement('div');
+  // ── DRIFT: class is now seat-cell, id is gone, data-seat carries the id ──
+  el.className        = `seat-cell ${type} ${isTaken ? 'taken' : 'available'}`;
+  el.dataset.seat     = seatId;
+  el.dataset.row      = row;
+  el.dataset.col      = col;
+  el.dataset.seatType = type;
+  el.setAttribute('aria-label', `Seat ${seatId} ${isTaken ? 'unavailable' : 'available'}`);
+  el.textContent = isTaken ? '' : col;
+  if (!isTaken) el.addEventListener('click', () => chooseSeat(seatId, el));
+  return el;
+}
+
+function chooseSeat(seatId, el) {
+  document.querySelectorAll('.seat-cell.selected').forEach(s => {
+    s.classList.remove('selected');
+    s.textContent = s.dataset.col;
+  });
+  el.classList.add('selected');
+  el.textContent = '✓';
+  selectedSeat = seatId;
+
+  document.getElementById('sum-seat').textContent    = `Seat ${seatId}`;
+  document.getElementById('co-sum-seat').textContent = `Seat ${seatId}`;
+  document.getElementById('conf-seat').textContent   = `Seat ${seatId}`;
+
+  document.querySelector('button[aria-label="Continue to checkout"]').disabled = false;
+  document.getElementById('seat-note').textContent = `Seat ${seatId} selected`;
+}
+
+function goToCheckout() {
+  if (!selectedSeat) return;
+  setStep(3);
+}
+
+function goToConfirmation() {
+  const emailEl = document.querySelector('input[name="p1-email"]');
+  const email   = emailEl ? emailEl.value || 'john@example.com' : 'john@example.com';
+  document.getElementById('conf-email').textContent      = email;
+  document.getElementById('booking-ref-code').textContent = 'VOY-' + Math.floor(100000 + Math.random() * 900000);
+  clearTimeout(sessionTimer);
+  clearInterval(countdownInterval);
+  setStep(4);
+}
+
+function resetApp() {
+  selectedFlightId    = null;
+  selectedFlightPrice = 489;
+  selectedSeat        = null;
+  clearTimeout(sessionTimer);
+  clearInterval(countdownInterval);
+  document.querySelectorAll('.flight-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('button[aria-label="Continue to checkout"]').disabled = true;
+  document.getElementById('sum-seat').textContent  = 'Not selected';
+  document.getElementById('seat-note').textContent = 'Please select a seat to continue';
+  buildSeatMap();
+  setStep(1);
+}
+
+// ─── CARD FORMAT ──────────────────────────────────────
+document.addEventListener('input', e => {
+  if (e.target.name === 'card-number') {
+    e.target.value = e.target.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim().slice(0,19);
+  }
+  if (e.target.name === 'card-expiry') {
+    e.target.value = e.target.value.replace(/\D/g,'').replace(/^(\d{2})(\d)/,'$1/$2').slice(0,5);
+  }
+});
+
+// ─── INIT ─────────────────────────────────────────────
+buildSeatMap();
+</script>
+</body>
+</html>
