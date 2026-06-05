@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Page</title>
+  <style>
+    body {
+      background: #f0faf0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+    h1 { color: #2d6a2d; margin-bottom: 24px; }
+    form {
+      background: #d4edda;
+      padding: 32px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 280px;
+    }
+    label { color: #2d6a2d; font-size: 14px; }
+    input {
+      padding: 8px 10px;
+      border: 1px solid #81c784;
+      border-radius: 4px;
+      font-size: 14px;
+      background: #f9fef9;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    button:hover { background: #388e3c; }
+  </style>
+</head>
+<body>
+  <h1>Fill the Form</h1>
+  <form onsubmit="handleSubmit(event)">
+    <label>Name
+      <input id="name" type="text" placeholder="Your name">
+    </label>
+    <label>Email
+      <input id="email" type="email" placeholder="Your email">
+    </label>
+    <label>Message
+      <input id="message" type="text" placeholder="Your message">
+    </label>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert('Submitted!');
+    }
+  </script>
+</body>
+</html>
