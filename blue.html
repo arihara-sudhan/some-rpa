@@ -1,89 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Blue</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Form</title>
+<style>
     body {
-      min-height: 100vh;
-      background: #00050f;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='10' y='20' font-size='10' fill='%23001a44' opacity='0.6'%3E✦%3C/text%3E%3Ctext x='50' y='55' font-size='7' fill='%23000d22' opacity='0.5'%3E★%3C/text%3E%3Ctext x='25' y='70' font-size='5' fill='%23001133' opacity='0.4'%3E✧%3C/text%3E%3C/svg%3E");
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #1e88e5;
+        font-family: Arial, sans-serif;
     }
 
-    .card {
-      width: min(360px, 92vw);
-      padding: 48px 36px;
-    }
-
-    h1 {
-      font-size: 0.7rem;
-      font-weight: 300;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: rgba(60,130,255,0.4);
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .field { margin-bottom: 28px; }
-
-    label {
-      display: block;
-      font-size: 0.62rem;
-      font-weight: 400;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(60,120,220,0.45);
-      margin-bottom: 8px;
+    .form {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 300px;
     }
 
     input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid rgba(30,90,200,0.3);
-      padding: 8px 0;
-      color: rgba(190,215,255,0.9);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 300;
-      outline: none;
-      transition: border-color 0.2s;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
     }
-
-    input::placeholder { color: rgba(40,80,180,0.3); }
-
-    input:focus {
-      border-bottom-color: rgba(60,140,255,0.65);
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>✦ &nbsp; member &nbsp; ✦</h1>
-
-    <div class="field">
-      <label>Name</label>
-      <input type="text" placeholder="Full name" />
+    <div class="form">
+        <input type="text" placeholder="First Input">
+        <input type="password" placeholder="Second Input">
+        <input type="text" placeholder="Third Input">
     </div>
-
-    <div class="field">
-      <label>Payer Name</label>
-      <input type="text" placeholder="Payer name" />
-    </div>
-
-    <div class="field">
-      <label>Member ID</label>
-      <input type="text" placeholder="Member ID" />
-    </div>
-  </div>
 </body>
 </html>
