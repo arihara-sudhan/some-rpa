@@ -1,373 +1,383 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step by step form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#EAF3EE;
+    --bg-2:#ECEDFB;
+    --card:#FFFFFF;
+    --ink:#1E2430;
+    --muted:#6B7280;
+    --primary:#1F6F5C;
+    --primary-dark:#17594A;
+    --accent:#E1A94C;
+    --border:#E3E6EA;
+    --radius:20px;
+    --shadow:0 20px 60px -20px rgba(30,36,48,0.28);
+  }
 
-export default function MultiPageSite() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    message: '',
-    experience: '',
-    interests: []
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:linear-gradient(135deg,var(--bg-1),var(--bg-2));
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+  }
+
+  .card{
+    width:100%;
+    max-width:460px;
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:40px 36px;
+  }
+
+  /* ---- progress indicator ---- */
+  .progress{ margin-bottom:32px; }
+  .progress-track{
+    height:4px;
+    background:var(--border);
+    border-radius:999px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--primary),var(--accent));
+    border-radius:999px;
+    transition:width .35s ease;
+  }
+  .progress-steps{
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    margin:0;
+    padding:0;
+  }
+  .progress-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .dot{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:var(--border);
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size:12px;
+    transition:background .25s, color .25s;
+  }
+  .progress-step.active .dot{ background:var(--primary); color:#fff; }
+  .progress-step.completed .dot{ background:var(--accent); color:#fff; }
+  .progress-step.active .label{ color:var(--ink); font-weight:600; }
+
+  /* ---- steps ---- */
+  .step{ animation:fadeSlide .35s ease; }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateX(14px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+  @media (prefers-reduced-motion:reduce){ .step{ animation:none; } }
+
+  h1{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:600;
+    margin:0 0 6px;
+  }
+  .subtitle{
+    color:var(--muted);
+    font-size:14px;
+    margin:0 0 26px;
+  }
+
+  .field{ margin-bottom:18px; }
+  .field label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .field input,
+  .field textarea{
+    width:100%;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:15px;
+    color:var(--ink);
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+    resize:vertical;
+  }
+  .field input:focus,
+  .field textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(31,111,92,0.14);
+  }
+
+  .actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+  }
+
+  .btn{
+    padding:12px 22px;
+    border-radius:10px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:15px;
+    border:none;
+    cursor:pointer;
+    transition:transform .12s, background .15s, border-color .15s, color .15s;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{ background:var(--primary); color:#fff; }
+  .btn-primary:hover{ background:var(--primary-dark); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--border); }
+  .btn-ghost:hover{ border-color:var(--primary); color:var(--primary); }
+
+  /* ---- success screen ---- */
+  .success{ text-align:center; }
+  .success-icon{
+    width:52px;
+    height:52px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:var(--primary);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+  }
+  .summary{
+    text-align:left;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:4px 14px;
+    margin:24px 0 28px;
+  }
+  .summary dt{
+    font-size:12px;
+    font-weight:600;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    align-self:start;
+    padding-top:2px;
+  }
+  .summary dd{
+    margin:0;
+    font-size:15px;
+    padding-bottom:6px;
+  }
+  .success .btn-primary{ width:100%; }
+
+  @media (max-width:480px){
+    .card{ padding:30px 22px; }
+    h1{ font-size:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="progress" id="progress">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <ol class="progress-steps">
+      <li class="progress-step" data-step="1"><span class="dot">1</span><span class="label">You</span></li>
+      <li class="progress-step" data-step="2"><span class="dot">2</span><span class="label">Contact</span></li>
+      <li class="progress-step" data-step="3"><span class="dot">3</span><span class="label">Notes</span></li>
+    </ol>
+  </div>
+
+  <form id="wizard" novalidate>
+
+    <section class="step" data-step="1">
+      <h1>Let's start with you</h1>
+      <p class="subtitle">Just the basics.</p>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" required placeholder="Jordan Lee">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="jordan@example.com">
+      </div>
+      <div class="actions">
+        <span></span>
+        <button type="button" class="btn btn-primary next-btn">Next</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="2" hidden>
+      <h1>How can we reach you</h1>
+      <p class="subtitle">We'll only use this if needed.</p>
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" name="phone" required placeholder="+91 98765 43210">
+      </div>
+      <div class="field">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" required placeholder="Chennai">
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-ghost back-btn">Back</button>
+        <button type="button" class="btn btn-primary next-btn">Next</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="3" hidden>
+      <h1>Anything else?</h1>
+      <p class="subtitle">Optional — add a note if you'd like.</p>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Write a note..."></textarea>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-ghost back-btn">Back</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </section>
+
+  </form>
+
+  <div class="success" id="success" hidden aria-live="polite">
+    <div class="success-icon">✓</div>
+    <h1 id="successHeading">Thanks!</h1>
+    <p class="subtitle">Here's what you told us.</p>
+    <dl class="summary" id="summary"></dl>
+    <button type="button" class="btn btn-primary" id="restartBtn">Start over</button>
+  </div>
+
+</div>
+
+<script>
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const progressSteps = Array.from(document.querySelectorAll('.progress-step'));
+  const progressFill = document.getElementById('progressFill');
+  const progressBar = document.getElementById('progress');
+  const form = document.getElementById('wizard');
+  const success = document.getElementById('success');
+  const summary = document.getElementById('summary');
+  const successHeading = document.getElementById('successHeading');
+
+  const total = steps.length;
+  let current = 1;
+
+  function showStep(n){
+    steps.forEach(s => { s.hidden = Number(s.dataset.step) !== n; });
+    progressSteps.forEach(p => {
+      const num = Number(p.dataset.step);
+      p.classList.toggle('active', num === n);
+      p.classList.toggle('completed', num < n);
+    });
+    progressFill.style.width = ((n - 1) / (total - 1)) * 100 + '%';
+    current = n;
+
+    const activeStep = steps.find(s => Number(s.dataset.step) === n);
+    const firstField = activeStep && activeStep.querySelector('input, textarea');
+    if (firstField) firstField.focus({ preventScroll: true });
+  }
+
+  function validateStep(stepEl){
+    const fields = stepEl.querySelectorAll('input[required], textarea[required]');
+    for (const field of fields){
+      if (!field.checkValidity()){
+        field.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  document.querySelectorAll('.next-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const stepEl = btn.closest('.step');
+      if (validateStep(stepEl)) showStep(current + 1);
+    });
   });
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      setFormData(prev => ({
-        ...prev,
-        interests: checked 
-          ? [...prev.interests, value]
-          : prev.interests.filter(i => i !== value)
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+  document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.addEventListener('click', () => showStep(current - 1));
+  });
+
+  // Enter key on steps 1–2 acts like clicking Next, instead of doing nothing
+  form.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && current < total && e.target.tagName !== 'TEXTAREA'){
+      e.preventDefault();
+      const stepEl = steps.find(s => Number(s.dataset.step) === current);
+      if (validateStep(stepEl)) showStep(current + 1);
     }
-  };
+  });
 
-  const nextPage = () => {
-    if (currentPage < 3) setCurrentPage(currentPage + 1);
-  };
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const stepEl = steps.find(s => Number(s.dataset.step) === current);
+    if (!validateStep(stepEl)) return;
 
-  const prevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
+    const data = new FormData(form);
+    summary.innerHTML = '';
+    form.querySelectorAll('input, textarea').forEach(field => {
+      const value = (data.get(field.name) || '').toString().trim();
+      if (!value) return;
+      const labelEl = form.querySelector(`label[for="${field.id}"]`);
+      const dt = document.createElement('dt');
+      dt.textContent = labelEl ? labelEl.textContent : field.name;
+      const dd = document.createElement('dd');
+      dd.textContent = value;
+      summary.appendChild(dt);
+      summary.appendChild(dd);
+    });
 
-  return (
-    <div style={styles.container}>
-      {/* Progress Bar */}
-      <div style={styles.progressSection}>
-        <div style={styles.progressBar}>
-          <div style={{
-            ...styles.progressFill,
-            width: `${(currentPage / 3) * 100}%`
-          }}></div>
-        </div>
-        <p style={styles.progressText}>
-          Page {currentPage} of 3
-        </p>
-      </div>
+    const name = (data.get('name') || '').toString().trim();
+    successHeading.textContent = name ? `Thanks, ${name.split(' ')[0]}!` : 'Thanks!';
 
-      {/* Page 1: Contact Information */}
-      {currentPage === 1 && (
-        <div style={styles.pageContent}>
-          <h1 style={styles.heading}>Contact Information</h1>
-          <p style={styles.subtitle}>Tell us about yourself</p>
-          
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Full Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="John Doe"
-              style={styles.input}
-            />
-          </div>
+    form.hidden = true;
+    progressBar.hidden = true;
+    success.hidden = false;
+  });
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Email Address</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="john@example.com"
-              style={styles.input}
-            />
-          </div>
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    form.reset();
+    form.hidden = false;
+    progressBar.hidden = false;
+    success.hidden = true;
+    showStep(1);
+  });
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="+1 (555) 123-4567"
-              style={styles.input}
-            />
-          </div>
+  // init
+  showStep(1);
+</script>
 
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Company</label>
-            <input
-              type="text"
-              name="company"
-              value={formData.company}
-              onChange={handleInputChange}
-              placeholder="Your Company"
-              style={styles.input}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Page 2: Professional Details */}
-      {currentPage === 2 && (
-        <div style={styles.pageContent}>
-          <h1 style={styles.heading}>Professional Details</h1>
-          <p style={styles.subtitle}>Share your experience</p>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Years of Experience</label>
-            <select
-              name="experience"
-              value={formData.experience}
-              onChange={handleInputChange}
-              style={styles.select}
-            >
-              <option value="">Select experience level</option>
-              <option value="0-2">0-2 years</option>
-              <option value="2-5">2-5 years</option>
-              <option value="5-10">5-10 years</option>
-              <option value="10+">10+ years</option>
-            </select>
-          </div>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Areas of Interest</label>
-            <div style={styles.checkboxGroup}>
-              {['Technology', 'Design', 'Marketing', 'Sales', 'Operations'].map(interest => (
-                <label key={interest} style={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    name="interests"
-                    value={interest}
-                    checked={formData.interests.includes(interest)}
-                    onChange={handleInputChange}
-                    style={styles.checkbox}
-                  />
-                  <span>{interest}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Page 3: Message */}
-      {currentPage === 3 && (
-        <div style={styles.pageContent}>
-          <h1 style={styles.heading}>Final Details</h1>
-          <p style={styles.subtitle}>Tell us more about your inquiry</p>
-
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Message</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleInputChange}
-              placeholder="Enter your message here..."
-              style={styles.textarea}
-              rows="6"
-            />
-          </div>
-
-          <div style={styles.reviewBox}>
-            <h3 style={styles.reviewHeading}>Review Your Information</h3>
-            <div style={styles.reviewContent}>
-              <p><strong>Name:</strong> {formData.name || 'Not provided'}</p>
-              <p><strong>Email:</strong> {formData.email || 'Not provided'}</p>
-              <p><strong>Company:</strong> {formData.company || 'Not provided'}</p>
-              <p><strong>Experience:</strong> {formData.experience || 'Not provided'}</p>
-              {formData.interests.length > 0 && (
-                <p><strong>Interests:</strong> {formData.interests.join(', ')}</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Navigation Buttons */}
-      <div style={styles.buttonGroup}>
-        <button
-          onClick={prevPage}
-          disabled={currentPage === 1}
-          style={{
-            ...styles.button,
-            ...styles.secondaryButton,
-            opacity: currentPage === 1 ? 0.5 : 1,
-            cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
-          }}
-        >
-          ← Previous
-        </button>
-
-        {currentPage === 3 ? (
-          <button
-            style={{...styles.button, ...styles.primaryButton}}
-            onClick={() => {
-              alert('Form submitted!\n\n' + JSON.stringify(formData, null, 2));
-            }}
-          >
-            Submit ✓
-          </button>
-        ) : (
-          <button
-            onClick={nextPage}
-            style={{...styles.button, ...styles.primaryButton}}
-          >
-            Next →
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-const styles = {
-  container: {
-    maxWidth: '600px',
-    margin: '0 auto',
-    padding: '40px 20px',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    backgroundColor: '#fafafa',
-    minHeight: '100vh'
-  },
-  progressSection: {
-    marginBottom: '40px'
-  },
-  progressBar: {
-    width: '100%',
-    height: '4px',
-    backgroundColor: '#e0e0e0',
-    borderRadius: '2px',
-    overflow: 'hidden',
-    marginBottom: '12px'
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#2563eb',
-    transition: 'width 0.3s ease'
-  },
-  progressText: {
-    fontSize: '13px',
-    color: '#666',
-    margin: '0',
-    fontWeight: '500'
-  },
-  pageContent: {
-    backgroundColor: 'white',
-    padding: '40px',
-    borderRadius: '8px',
-    marginBottom: '30px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
-  },
-  heading: {
-    margin: '0 0 8px 0',
-    fontSize: '28px',
-    fontWeight: '600',
-    color: '#1a1a1a'
-  },
-  subtitle: {
-    margin: '0 0 30px 0',
-    fontSize: '15px',
-    color: '#666',
-    fontWeight: '400'
-  },
-  formGroup: {
-    marginBottom: '24px'
-  },
-  label: {
-    display: 'block',
-    fontSize: '14px',
-    fontWeight: '500',
-    marginBottom: '8px',
-    color: '#333'
-  },
-  input: {
-    width: '100%',
-    padding: '10px 12px',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-    transition: 'border-color 0.2s'
-  },
-  select: {
-    width: '100%',
-    padding: '10px 12px',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-    backgroundColor: 'white'
-  },
-  textarea: {
-    width: '100%',
-    padding: '10px 12px',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-    resize: 'vertical'
-  },
-  checkboxGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px'
-  },
-  checkboxLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '14px',
-    color: '#333',
-    cursor: 'pointer'
-  },
-  checkbox: {
-    marginRight: '8px',
-    cursor: 'pointer',
-    width: '16px',
-    height: '16px'
-  },
-  reviewBox: {
-    backgroundColor: '#f5f5f5',
-    padding: '20px',
-    borderRadius: '6px',
-    marginTop: '20px'
-  },
-  reviewHeading: {
-    margin: '0 0 15px 0',
-    fontSize: '14px',
-    fontWeight: '600',
-    color: '#1a1a1a'
-  },
-  reviewContent: {
-    fontSize: '13px',
-    lineHeight: '1.6',
-    color: '#555'
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: '12px',
-    justifyContent: 'space-between'
-  },
-  button: {
-    flex: 1,
-    padding: '12px 24px',
-    fontSize: '14px',
-    fontWeight: '500',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    transition: 'all 0.2s'
-  },
-  primaryButton: {
-    backgroundColor: '#2563eb',
-    color: 'white'
-  },
-  secondaryButton: {
-    backgroundColor: 'white',
-    color: '#333',
-    border: '1px solid #ddd'
-  }
-};
+</body>
+</html>
